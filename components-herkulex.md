@@ -241,12 +241,14 @@
 
 В `herkulex_sched`:
 
-	updateHook() {
-    ...
-    if (!buffer_lock_free2.empty()) {
-       buffer_lock_free2.Pop(req)
-       обработка
-       response(ack)
+    updateHook() {
+       ...
+       if (!buffer_lock_free2.empty()) {
+          buffer_lock_free2.Pop(req)
+           обработка
+           response(ack)
+        }
+        ...
     }
     request(HerkulexPacket req) {
        buffer_lock_free2.Push(req)
@@ -366,6 +368,11 @@ Cемантика протокола в трансляции запросов в
 По идее, можно опросить сотосние всех приводов за несколько циклов.
 
 ### Детали реализации.
+
+Вместо ожидания при обработки запросов НМ можно выходить из `updateHook` и ждать события. 
+А `request_CP` при получении запроса формирует собыите вызовом `getActivity()->trigger()`.
+
+В OROCOS есть реализация таймера `Timer`, буфера `BufferLockFree` и средст синхронизации.
 
 ### Исключения и ошибки
 
