@@ -47,7 +47,11 @@
 -----------
 
 Ниже приведена общая схема СУ:
+![arch-schema-7.svg](/uploads/e171ac118fd57e8c2896da9b75cc8179/arch-schema-7.svg)
+
+<!---
 ![arch-schema-7.svg](/uploads/3c57e105f7682c13ff8ad1464a81bce2/arch-schema-7.svg)
+--->
 
 Пунктиром обозначены элементы, которые не обязательны для первой реализации.
 
