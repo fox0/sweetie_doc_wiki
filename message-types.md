@@ -67,18 +67,26 @@
     uint8 command
     uint8[] data
     # command types constants
-    uint8 CMD_EEP_WRITE=1
-    uint8 CMD_EEP_READ=2
-    uint8 CMD_RAM_WRITE=3
-    uint8 CMD_RAM_READ=4
-    uint8 CMD_I_JOG=5
-    uint8 CMD_S_JOG=6
-    uint8 CMD_STAT=7
-    uint8 CMD_ROLLBACK=8
-    uint8 CMD_REBOOT=9
+    uint8 CMD_EEP_WRITE=0x1
+    uint8 CMD_EEP_READ=0x2
+    uint8 CMD_RAM_WRITE=0x3
+    uint8 CMD_RAM_READ=0x4
+    uint8 CMD_I_JOG=0x5
+    uint8 CMD_S_JOG=0x6
+    uint8 CMD_STAT=0x7
+    uint8 CMD_ROLLBACK=0x8
+    uint8 CMD_REBOOT=0x9
+    uint8 ACK_EEP_WRITE=0x41
+    uint8 ACK_EEP_READ=0x42
+    uint8 ACK_RAM_WRITE=0x43
+    uint8 ACK_RAM_READ=0x44
+    uint8 ACK_I_JOG=0x45
+    uint8 ACK_S_JOG=0x46
+    uint8 ACK_STAT=0x47
+    uint8 ACK_ROLLBACK=0x48
+    uint8 ACK_REBOOT=0x49
 
 ### ServoGoal
-
 
 
 **Семантика**: Целевое значение для группы приводов c дискретным позиционным управлением. 
