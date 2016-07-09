@@ -84,27 +84,54 @@
 
 1. Требует: `bool requestResources(ResourceRequest req, bool success)` 
 1. Предоставляет: `bool releaseResources(ResourceRequest req, Empty)`
+1. `bool isOperational()` --- активен ли задатчик.
 
 ### Методы
 
 1. `getResourceSet()`, `bool hasResource(const string& res)` --- проверка бладания ресурсом.
 2. `bool requestExclusiveResources(const strings& resourses)` --- захватить набор ресурсов (пытается вызвать операцию requestResources()).
-3. `virtual void notifyResourcesAcquire()` (реализуется в наследнике) --- извещает о успешном захвате.
-4. `virtual void notifyResourcesRelease()` (реализуется в наследнике) --- извещает о осовобождении всех ресурсов.
+1. `bool setOperational(bool activate)` --- изменить состояние, очистить список ресурсов при деактивации.
+3. `virtual bool notifyResourcesAcquire()` (реализуется в наследнике-задатчике) --- извещает задатчик о успешном захвате.
+4. `virtual bool notifyResourcesRelease()` (реализуется в наследнике-задатчике) --- извещает задатчик о осовобождении ресурсов.
 
 ### Семантика исполнения
 
 **`requestExclusiveResources`**. Послать запрос, запомнить список ресурсов, вызвать `notifyResourcesAcquire()`. Если операция не готова --- неудача.
 
-**`releaseResources`**. Проверить пересечение ресурсов компонента и полученного списка. Если пересекается, очистить список, вызвать `notifyResourcesRelease()`. 
-Возвращает `true`, если компонент не активен после вызова.
+**`releaseResources`**. Если компонент не активен, то ничего не делать. Иначе проверить пересечение ресурсов компонента и полученного списка. Если пересекается, очистить список, вызвать `notifyResourcesRelease()`. 
+
+**Исполнение**. Вызов кода задатчика в `updateHook`. Однако формирование задающеого воздействия должно происходить 
+
+Cамо решение о запуске/остановке/активации/деактивации принимает код задатчика, вызывая `setOperational()` в `notifyResources*` (или ином месте, если ресурсы, к примеру, компоненту не требуются).
 
 ### Детали реализации
+
+Реализаци по умолчанию:
+
+    void notifyResourcesAcquire() {
+         if (!isRunning()) start();
+         setOperational(true);
+    }
+    void notifyResourcesRelease() {
+         setOperational(false);
+         stop();
+    }
+
+Типовой код задатчика:
+
+    void updateHook() {
+        if (sync_port.read(sync_msg, false)) {
+            if (isOperational()) {
+                ...
+                ref_joints_port.write(ref_joints);
+            }
+        }
+    }
 
 Интерфейс несколько переусложнен, что связано с поддержкой алльтернативных протоколов: на основе сообщений, запросы с приоритетами.
 
 При реализации системы переключения на базе сообщений (портов) для обработки входящих сообщений компонент должен быть запущен на этапе посылки запроса (рекомендуемый механизм --- callback-метод из `addEventPort`).
-В этом случае требуется предовратить выпонение клиенстского кода в `updateHook()` до завершения запроса. Возможных решения два:
+В этом случае требуется предовратить выпонение клиенстского кода в `updateHook()` до завершения запроса. Также требуется следить за вызовами 
 
 1. Обязать задатчик размещать свой код в методе `abstract void updateHookOperational()`.
 2. Метод `bool isOperational()` и обязать код задатчика делать проверку в `udpateHook()`

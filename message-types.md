@@ -17,25 +17,25 @@
 
         $ rosrun rtt_rosnode create_rtt_msgs robotname_msgs
 
-   Будет создан пакет `rtt_robotname_msgs`
+    Будет создан пакет `rtt_robotname_msgs`
 
 2. В файле `pacakge.xml` пакета, использующего созданный тип данных требуется указать зависимость:
 
-       <depend package="rtt_robotname_msgs"/>
+        <depend package="rtt_robotname_msgs"/>
 
 3. При написании кода C++ использовать заголовки:
 
-       #include <robotname/typekit/MsgName.h>
+        #include <robotname/typekit/MsgName.h>
 
 4. При разертывании компонента убедитесь в наличие необходимых типов:
 
-       # Поддержка элементарных типов ROS (к примеру, int64) появляется после этой команды.
-       # Возможно, также потребуются импорт пакетов (rtt_*_msgs).
-       import("rtt_ros");
-       # Загружаем typekit
-       import("rtt_robotname_msgs");
-       # Вывести список зарегистрированных типов 
-       .types
+        # Поддержка элементарных типов ROS (к примеру, int64) появляется после этой команды.
+        # Возможно, также потребуются импорт пакетов (rtt_*_msgs).
+        import("rtt_ros");
+        # Загружаем typekit
+        import("rtt_robotname_msgs");
+        # Вывести список зарегистрированных типов 
+        .types
 
 
 # Типы сообщений
