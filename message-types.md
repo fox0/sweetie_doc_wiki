@@ -52,15 +52,14 @@
 
 ### HerkulexPacket
 
-**Семантика**: Корректный пакет протокола сервоприводов Herkulex, предназначенный для посылки или полученный от приводов. (Проверка контрольных сумм произведена).
+**Семантика**: Либо корректный пакет протокола сервоприводов Herkulex, предназначенный для посылки или полученный от приводов. (Проверка контрольных сумм произведена), либо извещение о ошибке при получении ответа на запрос.
 
-**Прагматика**: в текущей версии используется для взаимоджействия между компонентами, реализующими разные уровни протокола (`herkulex_*`).
-Удобная форма для передачи конфигурационных сообщений от не РВ части в РВ.
-
-	# Herkulex servo control protocol packet. Message incapsulates proper outgoing (to servo) or incoming (from servo) packet. 
+**Прагматика**: в текущей версии используется для взаимоджействия между компонентами, реализующими разные уровни протокола (`herkulex_*`). Удобная форма для передачи конфигурационных сообщений от не РВ части в РВ.
+ 
+    # Herkulex servo control protocol packet. Message incapsulates proper outgoing (to servo) or incoming (from servo) packet. 
     #
-	#  * servo_id --- servo hardware ID.
-    #  * command --- protocol command (see Herkulex Servo manual).
+    #  * servo_id --- servo hardware ID.
+    #  * command --- protocol command (see Herkulex Servo manual) or error code.
     #  * data --- packet optional data without checksum.
     #
     uint8 servo_id
@@ -85,6 +84,9 @@
     uint8 ACK_STAT=0x47
     uint8 ACK_ROLLBACK=0x48
     uint8 ACK_REBOOT=0x49
+    uint8 ERR_TIMEOUT=0x81
+    uint8 ERR_CHECKSUM1=0x82
+    uint8 ERR_CHECKSUM2=0x83
 
 ### ServoGoal
 
