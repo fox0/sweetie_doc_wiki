@@ -1,0 +1,1 @@
+Fun fun fun ![](https://files.everypony.ru/smiles/b5/75/0f4d3c.png)
