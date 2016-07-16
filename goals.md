@@ -1,1 +1,1 @@
-Fun fun fun ![](https://files.everypony.ru/smiles/b5/75/0f4d3c.png)
+Fun fun fun ![](http://pinkie.mylittlefacewhen.com/media/f/img/mlfw9280-1355678759230.gif)
