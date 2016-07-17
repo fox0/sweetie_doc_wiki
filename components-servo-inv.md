@@ -18,11 +18,11 @@
 
 1. `servo_models` (`PropertyBag`) Древовидная структура (разные модели для разных приводов, опционально).
   
-      |- joint1_name
-      |  |- parameter1
-      |  \- parameter2 
-      \- joint2_name
-         \- parameter1 
+        |- joint1_name
+        |  |- parameter1
+        |  \- parameter2 
+        \- joint2_name
+           \- parameter1 
 
 2. `use_default_model` (`bool`)
 
