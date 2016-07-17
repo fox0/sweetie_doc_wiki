@@ -62,7 +62,7 @@
 Обратная кинематика
 
 1. `solveIK(string name, Pose, JntArray)`
-1. `solveDK(string name, Pose in, JntArray out, JntArray min, JntArray max)`
+1. `solveIK(string name, Pose in, JntArray out, JntArray min, JntArray max)`
 1. `solveVelIK(string name, Twist, JntArray)`
 1. `solveForceIK(string name, Wrench, JntArray)`
 1. `solveFullIK(CartesianState, JointState)`
