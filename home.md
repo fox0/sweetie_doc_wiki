@@ -16,6 +16,6 @@
   1. [Компонент-арбитр ресурсов](components-resource-control)
   1. [Компоненты кинематики](components-kinematics)
   1. [Компонент `dynamic_inv`](components-dynamics)
-  1. [Компонент `servo_inv`](components-servo_inv)
+  1. [Компонент `servo_inv`](components-servo-inv)
   1. [Интерфейс `herkulex_`](components-herkulex)
   1. [Вспомогательная библиотека: фильтры](library-filters)
