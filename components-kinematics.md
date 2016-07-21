@@ -103,7 +103,7 @@ TODO Уточнить, отсортировать.
 
 ### Конструктор
 
-`RobotURDFModel(TaskContext *)` ---  добавляет в `TaskContext` компонента параметры `urdf_file` и `kinematics_chains` и внешние операции.
+`RobotURDFModel(TaskContext *)` ---  добавляет в `TaskContext` компонента параметры `urdf` и `kinematics_chains` и внешние операции.
 
 ### Поля
 
