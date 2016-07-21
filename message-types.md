@@ -165,7 +165,7 @@
 
      # Robot weight distributon between legs.
      #  * name --- the name of the chain.
-     #  * support --- leg support coefficient for each leg. Support coefficient is the ratio of 
+     #  * support --- leg support coefficients. Support coefficient is the ratio of 
      # the weight corresponding to the leg to the total weight of robot.
      #
      # All arrays sould have the same size.
@@ -194,17 +194,17 @@
      #  * name --- the name of kinematic chain.
      #  * position --- angular position of each joint in the kinematic chain.
      #  * speed --- angular speed of joints.
-     #  * force --- external force applied to the last segment in robot frame coordinates (maybe world coordinates?)
+     #  * effort --- effort applied to the joint.
+     #  * support --- leg support coefficients.      
      #
      Header header
      string[] name
      KDL::JntArray[] position
      KDL::JntArray[] speed
-     # wrench[] force
+     #KDL::JntArray[] effort
+     double[] support
 
 **Замечание**: Обязательно заполнены поля name, position, speed.
-
-**Замечание**: force может использоваться вместо структуры `SupportState`.
 
 ## Состояние робота: декоративные элементы
 
