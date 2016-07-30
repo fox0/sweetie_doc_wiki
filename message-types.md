@@ -234,18 +234,36 @@
 Эти сообщения используются для переключения походок и анимаций. Пока приводится только сообщение базового варианта архитектуры c
 с вытесняющей моделью распределения.
 
-### ResourceRequest
+### ResourceList (бывшее ResourceRequest)
 
-**Семантика**: сообщение-декларация, что данный компонент будет использовать указанный набор ресурсов. 
-Запрос ресурсов никогда не может быть неуспешен. Иные компоненты, использующие ресурсы должны немедленно 
-прекратить свое выполнение.
+**Семантика**: универсальное сообщение, используется для уведомления о запросах компонента на ресурсы,
+уведомления о деактивации компонента (освобождении ресурсов), передачи списка ресурсов.
 
-     # Request to acqure a set of resources. Request never fails.
-     #  * name --- name of the component emmiting request .
-     #  * resourses --- resources set (kinematic chains names: leg1, leg2, ..., tail, eyes).
-     #
-     string name
-     string[] resources
+    # Set of resources and status of controllers.
+    #  * name --- name of the controller component emmiting request.
+    #  * status --- state of the controller component emmiting request.
+    #  * resourses --- resources set (kinematic chains names: leg1, leg2, ..., tail, eyes).
+    #  * pending_pri --- priorities in pending state
+    #  * operational_pri --- priorities in operational state
+    #
+	#  Only necessary fields are filled. Possible sets are:
+    #  * Deactivating notification from controller: name, status
+    #  * Resource request from controller: name, status, request, priorities 
+    #  * Resuorce list: resources
+    #
+    string name
+    uint8 status
+    string[] resources
+    uint8[] pending_pri 
+    uint8[] operational_pri 
+    # statuses
+    uint8 NONOPERATIONAL=0
+    uint8 OPERATIONAL=1
+    uint8 PENDING=2
+
+**Замечание**. Заполняются только необходимые поля.
+
+**Замечание**. Последние два поля нужны только для системы с приоритетами.
 
 **Замечание**: Более машинное представление ресурсов --- ID и битовые векторы. Однако такой подход полразумевает необходимость 
 ощих средств преобразования их в имена.
