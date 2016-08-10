@@ -47,7 +47,7 @@
 -----------
 
 Ниже приведена общая схема СУ:
-![arch-schema-7.svg](arch-schema-7.svg)
+![arch-schema-7.png](arch-schema-7.png)
 
 <!---
 ![arch-schema-7.svg](/uploads/3c57e105f7682c13ff8ad1464a81bce2/arch-schema-7.svg)
