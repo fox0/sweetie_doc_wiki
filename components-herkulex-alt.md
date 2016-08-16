@@ -116,7 +116,7 @@
 
 ### Операции
 
-1. Предоставляет: `void cmdReqDL(HerkulexPacket req)` (`OwnThread`) --- получить асинхронную команду, передать ее в сеть.
+1. Предоставляет: `bool cmdReqDL(HerkulexPacket req)` (`OwnThread`) --- получить асинхронную команду, передать ее в сеть.
 1. Требует: `void cmdAckDL(HerkulexPacket ack)`  --- известить о получении корректного пакета.
 
 Опционально:
@@ -200,14 +200,18 @@
 
 (Преимущественно `OwnTread`, в порядке важности, все не нужны).
 
-1. `strings listRegister(servo)`
-2. `uint getRegister(servo, reg)` --- (что делать с ошибочным именем?)
-3. `bool setRegister(servo, reg, val)`
-4. `printRegisterList(servo)`
-4. `printRegisters(servo, regs)`
-4. `printAllRegisters(servo)`
+1. `strings listRegisters(servo)`
+2. `uint getRegisterRAM(servo, reg)` --- (что делать с ошибочным именем?)
+3. `bool setRegisterRAM(servo, reg, val)`
+4. `printRegisterRAM(servo, reg)`
+4. `printAllRegistersRAM(servo)`
 5. `getStatus(servo)`
 5. `clearStatus(servo)`
+4. `printServoStatus(servo)`
+4. `printAllServoStatuses()`
+4. `printErrorServoStatuses()`
+5. `resetServo(servo)` --- провести инициализацию привода заново.
+5. `resetAllServos()`
 6. `publishState(servos)` --- опросить позицию и скорость, опубликовать ее.
 6. `writeRegProperties()` --- обновить значения параметров в `registers_init` текущими значениями регистров (новые не создавать).
 6. `addRegProperties()` --- добавить новые параметры, инициализировать их регистрами.
@@ -215,8 +219,8 @@
 
 **Интерфейс с `herkulex_sched`**. 
 
-1. Требует: `void cmdReqCP(HerkulexPacket req)` --- извещает `herkulex_sched` через `BufferLockFree` о новом запросе. 
-1. Предоставляет: `void cmdAckCP(HerkulexPacket req)` (`ClientTread`)  записывает в `BufferLockFree` результат запроса, посылает 
+1. Требует: `void sendPacketCM(HerkulexPacket req)` --- извещает `herkulex_sched` через `BufferLockFree` о новом запросе. 
+1. Предоставляет: `void receivePacketCM(HerkulexPacket req)` (`ClientTread`)  записывает в `BufferLockFree` результат запроса, посылает 
     сигнал условной переменной.
 
 Это механизм позволяет преобразовать синхронный вызов функции `sendRequest` в `herkulex_array` в асинхронный запрос на уровне `herkulex_sched`.
@@ -224,13 +228,15 @@
 
 ### Методы
          
-1. `sendRequest(HerkulexPacket req, HerkulexPacket ack)`  --- синхронный запрос к приводам. Вызывает `cmdReqCP`, блокируется на условии до истечения `timeout` или вызова `cmdAckCP`.
+1. `sendRequest(HerkulexPacket req, bool (* ack_callback)(HerkulexPacket ack))`  --- синхронный запрос к приводам. Вызывает `sendPacketCM`, 
+блокируется на условии до истечения `timeout` или вызова `receivePacketCM`. При получении пакета проверет его при помощи вызова `ack_callback()`.
+Если результат неудовлетворителен, то ждет ноавого пакета или повторяет запрос.
 
 ### Семантика исполнения
 
 **Конфигурация**. Считываются опции, создается `HerkulexArray`, содержащий объекты `HerkulexServo`. Проводится инициализация приводов и регистров по параметрам.
 
-**Исполнение**. `updateHook` пуст, основной код в операциях. Операции транслируют запрос в вызовы `cmdSync`. 
+**Исполнение**. `updateHook` пуст, основной код в операциях. Операции транслируют запрос в вызовы `sendRequest`. 
 
 В некоторой степени открыт вопрос кеширования регистров и приводов. Для ускорения операций требующий чтения множества регистров они очень желательны.
 
@@ -244,13 +250,16 @@
 
 В `herkulex_array`:
 
-    cmdSync(HerkulexPacket req, HerkulexPacket ack) {
-       request(req)
-       ждем условия: !buffer_ack_CP.Empty()
-	   buffer_ack_CP.Pop(ack)
+    sendRequest(HerkulexPacket req, bool (*ack_callback)(HerkulexPacket ack)) {
+	   do {
+          sendPacketCM(req)
+          ждем условия: !buffer_ack_CP.Empty()
+	      buffer_ack_CM.Pop(ack)
+          success = ack_callback(ack);
+	   } while( условие повторения )
 	} 
-    responseCM(HerkulexPacket ack) {
-       buffer_ack_CP.Push(ack)
+    receivePacketCM(HerkulexPacket ack) {
+       buffer_ack_CM.Push(ack)
        сигнализируем условие
     }
 
@@ -265,24 +274,24 @@
         }
         ...
     }
-    cmdReqCP(HerkulexPacket req) {
+    sendPacketCM(HerkulexPacket req) {
         if (this->isRunning())  
-            buffer_CP_req.Push(req)
+            buffer_CM_req.Push(req)
         else {
-            herkulex_driver.cmdReqDL(req);
+            herkulex_driver.sendPacketDL(req);
         }
     } 
-    responsetDL(HerkulexPacket ack) {
+    receivePacketDL(HerkulexPacket ack) {
         if (this->isRunning())  
             buffer_DL_resp.Push(ack)
         else {
-            herkulex_array.cmdAckCP(ack);
+            herkulex_array.receivePacketCM(ack);
         }
     } 
 
 В `herkulex_driver`:
 
-    cmdReqDL(HerkulexPacket req) {
+    sendPacketDL(HerkulexPacket req) {
 		кодирование пакета
         запись в порт
     } 
@@ -347,12 +356,13 @@
     * `const HerkulexServo * GetServo(const string& name)`, `const HerkulexServo * GetServo(uint hw_id)` --- получить указатель на привод.
 <!--- * `bool .ackRead(HerkulexPacket& ack, string name, RegisterValues regs)` --- декодирование запроса, false при несовпадении типа или привода ->
 
-Для извещения о ошибках следует использовать исключения, однако надо помнить, что это не РВ средство. Т.е. в случае кода РВ лучше сделать проверки явно.
+Для извещения о ошибках следует использовать исключения, однако надо помнить, что это не РВ средство, а средство извещения о ошибках, не являющихся нормальным
+состоянием системы. Поэтому о ошибке декодирования пакетов извещение происходит посредством  возврата `false`.
 
 Типовое использование:
 
      const HerkulexServo& servos = array->getServo(name); // исключения по имени привода
-     servo->reqRead(req_packet, "velocity");  // исключение по имени регистра
+     servo.reqRead(req_packet, "velocity");  // исключение по имени регистра
      cmdSync(req_packet, ack_packet); 
      if (! servo->ackRead(ack_packet, cache))
          if (servo->getHWID() ~= ack_packet.hw_id) ....
@@ -403,21 +413,15 @@
 
 **Интерфейс с `herkulex_driver`**. 
 
-1. Требует: `void cmdReqDL(HerkulexPacket req)` --- извещает канальный уровень (Data Link) `herkulex_driver` через о новом запросе. 
-1. Предоставляет: `void cmdAckDL(HerkulexPacket req)` (`ClientTread`)  записывает в `BufferLockFree` результат запроса, извещает компонент о получении ответа.
-1. Требует:	`uint estimate(uint data_size, bool ack_rek)` (`ClientTread`) --- верхняя оценка времени обмена (опционально).
-
-<!--
-1. Требует:	`bool cmdSync(HerkulexPacket& req, HerkulexPacket& ack)` (`OwnThread`) --- послать запрос, дождаться ответа, вернуть результат.
-1. Требует:	`bool cmd(HerkulexPacket& cmd, Empty)` (`OwnThread`) --- послать команду, не ожидать ответа. 
-
--->
+1. Требует: `void sendPacketDL(HerkulexPacket req)` --- извещает канальный уровень (Data Link) `herkulex_driver` через о новом запросе. 
+1. Предоставляет: `void receivePacketDL(HerkulexPacket req)` (`ClientTread`)  записывает в `BufferLockFree` результат запроса, извещает компонент о получении ответа.
 
 ### Методы
 
 ### Семантика исполнения
 
-Операция **cmdReqCP**. Поведение детализировано выше. В зависимоси от состояни компонента (запущен, остановлен) помещает запрос в буфер, либо передает его на исполнение канальному уровню немедленно.
+Операция **sendPacketCM**. Поведение детализировано выше.
+ В зависимоси от состояни компонента (запущен, остановлен) помещает запрос в буфер, либо передает его на исполнение канальному уровню немедленно.
 
 **Исполнение**. `updateHook()`:
 
@@ -436,10 +440,10 @@
 
 ### Детали реализации.
 
-Таймер timeout можно реализовать также средсвами `herkulex_sched`: запускать его при вызове `cmdReqDL`, по истечению делать `trigger()`.
+Таймер `timeout` можно реализовать также средсвами `herkulex_sched`: запускать его при вызове `sendRequestDL`, по истечению делать `trigger()`.
 Аналогичным способом реализуется таймер слотов РВ и НиМ.
 
-Ожидание запроса НиМ (`cmdReqCP`) и ответа приводов (`cmdAckDL`) можно осуществить выходом из `updateHook`. По событию (исполнение операции, или `getActivity()->trigger()`) 
+Ожидание запроса НиМ (`sendPacketCM`) и ответа приводов (`receivePacketDL`) можно осуществить выходом из `updateHook`. По событию (исполнение операции, или `getActivity()->trigger()`) 
 снова начнет исполнятся пользовотельский код. Надо только проверить тип события: запрос, ответ, таймер.
 При такой реализации будет не цикл, а конечный автомат.
 
