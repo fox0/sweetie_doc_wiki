@@ -9,8 +9,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    version="1.1"
-   width="744.09448"
-   height="1052.3622"
+   width="278.46875"
+   height="511.25"
    id="svg2">
   <defs
      id="defs4" />
@@ -27,6 +27,7 @@
     </rdf:RDF>
   </metadata>
   <g
+     transform="translate(-6.78125,-40.4375)"
      id="layer1">
     <path
        d="m 43.75,86.647896 159.29697,0"
@@ -484,5 +485,12 @@
          x="126.77414"
          y="371.51935"
          id="tspan4638">E</tspan></text>
+    <rect
+       width="277.74689"
+       height="510.53223"
+       x="7.1428571"
+       y="40.790039"
+       id="rect3078"
+       style="fill:none;stroke:#000000;stroke-width:0.69999999;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
   </g>
 </svg>
