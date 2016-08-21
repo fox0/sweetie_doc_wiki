@@ -87,6 +87,8 @@
     uint8 ERR_TIMEOUT=0x81
     uint8 ERR_CHECKSUM1=0x82
     uint8 ERR_CHECKSUM2=0x83
+    uint8 HEADER_SIZE=7
+    uint8 DATA_SIZE=213
 
 ### ServoGoal
 
@@ -188,30 +190,6 @@
 
 **Замечание**: можно отказаться от `name`, но тогда будут сложности с расшитрениеи массива датчиков касания.
 
-### JointLimbState
-
-**Семантика**: состояние кинематической цепочки в угловых координатах.
-
-Данное соообщение опционально. Оно понадобиться, если только мы примем соответсвующий альтернативный вариант архитектуры. Здесь оно сохранено только как история.
-
-**Прагамтика**: позволяет задавть состояние одной конечности или группы конечностей как единое целое. Т.к. конечность, а не привод явялется основной ресурсом, то такое 
-задание удобнее при распределении ресурсов. Т.к. содержит непосредственно JntArray значительно удобнее при вычислениях прямой кинематики и динамики (под вопросом).
-
-     # State vectors of the group of kinematics chains. It is assumed that all chains are linked to robot frame.
-     #  * name --- the name of kinematic chain.
-     #  * position --- angular position of each joint in the kinematic chain.
-     #  * speed --- angular speed of joints.
-     #  * effort --- effort applied to the joint.
-     #  * support --- leg support coefficients.      
-     #
-     Header header
-     string[] name
-     KDL::JntArray[] position
-     KDL::JntArray[] speed
-     #KDL::JntArray[] effort
-     double[] support
-
-**Замечание**: Обязательно заполнены поля name, position, speed.
 
 ## Состояние робота: декоративные элементы
 
@@ -274,6 +252,39 @@
 
 **Замечание**: Более машинное представление ресурсов --- ID и битовые векторы. Однако такой подход полразумевает необходимость 
 ощих средств преобразования их в имена.
+
+### ResourceRequest)
+
+**Семантика**: Запрос ресурсов у арбитра. Уведомляет арбитр о желании получить некий набор ресурсов и приоритет. 
+Задаются два приоритета: приоритет при ожидании активации и приоритет в активном сотоянии. Подробнее в [переключении походок](gait-switchong).`
+
+    # Resource assigment request.
+    #  * requester_name --- name of the controller component emmiting request.
+    #  * resourses --- resources set (kinematic chains names: leg1, leg2, ..., tail, eyes).
+    #  * pending_pri --- priorities in pending state (same size as resources).
+    #  * operational_pri --- priorities in operational state (same size as resources).
+
+	string requester_name    
+    string[] resource       
+    float[] pri_operational
+    float[] pri_pending
+
+### ResourceRequesterState
+
+**Семантика**: Уведомление арбитр о согласии с выделенным набором ресурсов (компонент остается активен) и о деактивации компонета.
+
+    # Acknowledge of ResourceList (is_operational = true) or notification about deactivation (is_operational = false).
+    bool is_operational
+
+### ResourceRequesterState
+
+**Семантика**: Распределение ресурсов между задатчиками.
+
+    # Resource assigment to controllers.
+    #  * resource --- assigment resources list.
+    #  * owner --- owner controller name.
+    string[] resource
+    string[] owner
 
 ## Тактирование и синхронизация
 
