@@ -47,7 +47,7 @@
 -----------
 
 Ниже приведена общая схема СУ:
-![arch-schema-7.svg](arch-schema-7.svg)
+![arch-schema-7.png](arch-schema-7.png)
 
 <!---
 ![arch-schema-7.svg](/uploads/3c57e105f7682c13ff8ad1464a81bce2/arch-schema-7.svg)
@@ -57,7 +57,7 @@
 
 Выделяются следующие подсистемы:
 
-1. Походки/анимации и механизм переключения между ними (`gait_*`, `animation_*`, `resource_control`).
+1. Походки/анимации и механизм переключения между ними (`gait_*`, `animation_*`, `resource_server`).
 2. Агрегация и публикация желаемого состояния робота (`*_agregator`).
 3. Расчет задающего воздействия для приводов (`servo_inv`, `dynamics_inv`).
 4. Взаимодействие с аппаратной частью (`herkulex_*`, `*_driver`).
