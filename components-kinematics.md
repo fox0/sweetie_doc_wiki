@@ -1,7 +1,7 @@
 Кинематика `kinematics`
 =======================
 
-Компонент предоставляет средства решения задач кинематики (прямой, обратной, мгновенной) 
+Компонент(ы) предоставляет средства решения задач кинематики (прямой, обратной, мгновенной) 
 и ряд вспомогательных преобразований.
 
 Предоставляются разные интерфейсы: порты, операции.
@@ -10,11 +10,12 @@
 
 Прямая кинематика
 
-1. `joints_in`/`limbs_joints_in` (`JointState`/`JointLimbState`) --- состояние робота в угловой СК (желаемая или реальная по датчикам).
+1. `joints_sorted_dk_in` (`JointState`) --- состояние робота в угловой СК (отсортированная).
 
 Обратная кинематика
 
-1. `limbs_cartesian_in` (`CartesianState`) --- состояние робота в декартовой СК (желаемая или реальная по датчикам).
+1. `limbs_cartesian_ik_in` (`CartesianState`) --- состояние робота в декартовой СК (желаемая или реальная по датчикам).
+2. `joints_sorted_ik_in` (`JointState`) --- текущее состояние робота в угловой СК (отсортированное), первое приближение для решения задачи обратной кинематики.
 
 ### Выходные порты
 
@@ -24,7 +25,7 @@
 
 Обратная кинематика
 
-1. `joints_out`/`limbs_joints_out` (`JointState`/`JointLimbState`) --- состояние робота в угловой СК (желаемая или реальная по датчикам).
+1. `joints_out` (`JointState`/`JointLimbState`) --- состояние робота в угловой СК (желаемая или реальная по датчикам).
 
 
 ### Параметры
@@ -49,16 +50,16 @@
 Прямая кинематика
 
 1. `solveDK(string name, JntArray, Pose)`
-1. `solveVelDK(string name, JntArray, Twist)`
-1. `solveForceDK(string name, JntArray, Wrench)`
+1. `solveVelDK(string name, JntArray pos, JntArray vel_in, Twist vel_out)`
+1. `solveForceDK(string name, JntArray pos, JntArray efforts, Wrench force)`
 1. `solveFullDK(JointLimbState, CartesianState)`
 
 Обратная кинематика
 
 1. `solveIK(string name, Pose, JntArray)`
 1. `solveIK(string name, Pose in, JntArray out, JntArray min, JntArray max)`
-1. `solveVelIK(string name, Twist, JntArray)`
-1. `solveForceIK(string name, Wrench, JntArray)`
+1. `solveVelIK(string name, JntArray pos, Twist vel_in, JntArray vel_out)`
+1. `solveForceIK(string name, JntArray pos,, Wrench force_in, JntArray effort_out)`
 1. `solveFullIK(CartesianState, JointState)`
 
 ### Сервисы и плагины
