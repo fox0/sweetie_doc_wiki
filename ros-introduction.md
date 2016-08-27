@@ -194,6 +194,10 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+)
+
 add_executable(my_robot_brain src/my_robot_brain.cpp)
 
 add_dependencies(my_robot_brain
