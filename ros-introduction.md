@@ -114,7 +114,7 @@ ws
 ### Файл package.xml
 В этом файле содержится информация о пакете, имя, версия, описание, и т.д.
 Пример:
-```
+```xml
 <package>
   <name>foo_core</name>
   <version>1.2.4</version>
@@ -165,7 +165,7 @@ ws
 Частично переведенная официальная документация [тут](http://wiki.ros.org/ru/catkin/CMakeLists.txt).
 
 Пример:
-```
+```cmake
 cmake_minimum_required(VERSION 2.8.3)
 project(robot_brain)
 find_package(catkin REQUIRED COMPONENTS
