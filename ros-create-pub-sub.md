@@ -330,3 +330,4 @@ rosrun celestia celestia_node
 ```
 rosrun twilight twilight_node
 ```
+![pub-sub](/uploads/d9e1074e1e5b8d93435a16365a57cc82/pub-sub.png)
