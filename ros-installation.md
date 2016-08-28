@@ -43,3 +43,8 @@ echo 'source $HOME/ros/my_ws/devel/setup.bash' >> ~/.bashrc
 ```
 
 Подробно установка описана [тут](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment).
+
+### Смотри далее:
+1. [Создание пакетов использующих «публикацию/подписку»](ros-create-pub-sub)
+1. [Создание и вызов сервисов](ros-create-service)
+1. [Параметр сервер (Parameter Server)](ros-parameters)
