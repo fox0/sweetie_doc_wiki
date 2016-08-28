@@ -25,13 +25,12 @@
     1. [Установка](ros-installation)
     1. [Создание пакетов использующих «публикацию/подписку»](ros-create-pub-sub)
     1. [Создание и вызов сервисов](ros-create-service)
+    1. [Параметр сервер (Parameter Server)](ros-parameters)
 6. Использование OROCOS
     1. [Введение](orocos-introduction)
     1. Примеры
-       1. [Передача данных через порт](orocos-example1)
-       2. [Операции](orocos-example2)
-       3. Добавляем интеграцию с ROS
-          * [Пример1](orocos-ros-example1)
-          * [Пример2](orocos-ros-example2)
-       4. Параметры
-       1. [Сервисы и плагины](orocos-services)
+       1. [Пример1: Передача данных через порт](orocos-example1)
+       2. [Пример2: Операции](orocos-example2)
+       3. [Добавляем интеграцию с ROS примеру 1](orocos-ros-example1)
+       4. [Добавляем интеграцию с ROS примеру 2](orocos-ros-example2)
+       5. [Сервисы и плагины](orocos-services)
