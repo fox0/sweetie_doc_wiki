@@ -210,3 +210,5 @@ target_link_libraries(kinematic_solver
   ${catkin_LIBRARIES}
 )
 ```
+
+### Смотри далее:  [Установка](ros-installation)
