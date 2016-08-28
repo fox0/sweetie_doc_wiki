@@ -331,3 +331,7 @@ rosrun celestia celestia_node
 rosrun twilight twilight_node
 ```
 ![pub-sub](/uploads/d9e1074e1e5b8d93435a16365a57cc82/pub-sub.png)
+
+### Смотри также
+* [Writing a Simple Publisher and Subscriber (C++)](http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28c%2B%2B%29)
+* [Создание и вызов сервисов](ros-create-service)
