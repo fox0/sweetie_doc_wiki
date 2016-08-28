@@ -289,3 +289,6 @@ roscore
 [ INFO] [1472376098.419337334]: Requesting 1+1
 [ INFO] [1472376098.420931418]: 1 + 1 = 2
 ```
+Смотри также:
+1. [Writing a Simple Service and Client (C++)](http://wiki.ros.org/ROS/Tutorials/WritingServiceClient%28c%2B%2B%29)
+1. [Параметр сервер (Parameter Server)](ros-parameters)
