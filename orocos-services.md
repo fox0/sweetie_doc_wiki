@@ -19,6 +19,7 @@
 
 Пусть описан сервис:
 
+```cpp
     class HelloInterface  // программисткий интерфейс
     {
         public:
@@ -49,7 +50,7 @@
                 addOperationCaller(hello);
             }
     }
-
+```
 
 Использовать сервисы и плагины можно разным способами.
 
@@ -57,13 +58,15 @@
 
      Конструктор компонента, предоставляющего сервис:
 
+```cpp
          ProviderComponent() {
              shared_ptr<HelloService> hello_serv = new HelloService("hello", this);
              this->provides()->addService(hello_serv);
          }
-
+```
      Компонент, использующий сервис:
 
+```cpp
          class RequesterComponent() {
              shared_ptr<Hello> hello_req; // boost::shared_ptr
          public:
@@ -79,6 +82,7 @@
                  this->requires("hello")->hello();
              }
           }
+```
 
       Связывание `ServiceRequester` и `Service` разных компонент осуществляется вызовом deployer `connectServices()`, 
       соединяющим *одноименные* сервисы. У `ServiceRequester` есть также метод `connectTo()`.
@@ -89,6 +93,7 @@
 
 2. Использование сервиса (плагина) текущего компонента при помощи внешнего интерфейса:
 
+```cpp
          class Component() {
              shared_ptr<Hello> hello_req;
          public:
@@ -101,9 +106,11 @@
                  getProvider<Hello>("hello")->hello();
              }
           }
+```
 
 2. Использование сервиса (плагина) текущего компонента при помощи внутреннего интерфейса:
 
+```cpp
          class Component() {
          public:
              shared_ptr<HelloInterface *> hello_if
@@ -115,14 +122,14 @@
                  hello_if->hello();
              }
           }
+```
 
 Нет стандартных способов загрузить плагин не под его именем. Т.е. тип жестко связан с именем, 
 Отчасти это можно решить, добавив операции, получающую имя плагина/сервиса в виде параметра:
 
+```cpp
     loadHello(string& name) {
         hello_req = getProvider<Hello>(name);
         hello_if = dynamic_pointer_cast<HelloInterface>(getService("hello"));
     }
-
-     
-
+```
