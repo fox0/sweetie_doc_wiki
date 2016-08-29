@@ -20,6 +20,7 @@
     1. [Компонент расчета динамики `dynamics_inv`](components-dynamics)
     1. [Компонент обращения модели приводов `servo_inv`](components-servo-inv)
     1. [Компонент-интерфейс приводов `herkulex_`](components-herkulex-alt) 
+    1. [Компонент таймера](components-timer) 
     1. [Вспомогательная библиотека: фильтры](library-filters)
 5. Использование ROS
     1. [Введение](ros-introduction)
