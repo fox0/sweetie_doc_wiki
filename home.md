@@ -13,6 +13,7 @@
     1. [Типы сообщений подсистемы управления движением](message-types)
     1. [Компонент агрегатор позы `agregator_gait`](components-agregator-gait)
     1. [Компоненты задатчиков](components-gait)
+    1. [Список задатчиков](components-gaits-and-animations)
     1. [Компонент-арбитр ресурсов](components-resource-control)
     1. [Плагин с кинодинамической моделью робота](plugin-robotmodel)
     1. [Компоненты кинематики `kinematics`](components-kinematics)
