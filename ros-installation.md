@@ -1,6 +1,6 @@
 # Установка ROS
 Текущая версия [ROS Kinetic](http://wiki.ros.org/ROS/Installation) пока не поддерживает все нужные нам функции, поэтому решено было пока остаться на [ROS Indigo](http://wiki.ros.org/indigo).
-Подробна установка описана [тут](http://wiki.ros.org/indigo/Installation). Ниже приведена краткая инструкция по установке Indigo на Ubuntu 14.04 LTS.
+Подробно установка описана [тут](http://wiki.ros.org/indigo/Installation). Ниже приведена краткая инструкция по установке Indigo на Ubuntu 14.04 LTS.
 
 ```
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
