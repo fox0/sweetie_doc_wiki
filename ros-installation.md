@@ -42,7 +42,7 @@ source $HOME/ros/my_ws/devel/setup.bash
 echo 'source $HOME/ros/my_ws/devel/setup.bash' >> ~/.bashrc
 ```
 
-Подробно установка описана [тут](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment).
+Подробно создание рабочей директории описано [тут](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment).
 
 ### Смотри далее:
 1. [Создание пакетов использующих «публикацию/подписку»](ros-create-pub-sub)
