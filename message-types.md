@@ -221,7 +221,8 @@ float64[] playtime
 Эти сообщения используются для переключения походок и анимаций. Пока приводится только сообщение базового варианта архитектуры c
 с вытесняющей моделью распределения.
 
-### ResourceList (бывшее ResourceRequest)
+### ResourceList
+**`Внимание! Сообщение не используется в последней версии архитектуры!`**
 
 **Семантика**: универсальное сообщение, используется для уведомления о запросах компонента на ресурсы,
 уведомления о деактивации компонента (освобождении ресурсов), передачи списка ресурсов.
@@ -229,14 +230,14 @@ float64[] playtime
     # Set of resources and status of controllers.
     #  * name --- name of the controller component emmiting request.
     #  * status --- state of the controller component emmiting request.
-    #  * resourses --- resources set (kinematic chains names: leg1, leg2, ..., tail, eyes).
+    #  * resources --- resources set (kinematic chains names: leg1, leg2, ..., tail, eyes).
     #  * pending_pri --- priorities in pending state
     #  * operational_pri --- priorities in operational state
     #
 	#  Only necessary fields are filled. Possible sets are:
     #  * Deactivating notification from controller: name, status
     #  * Resource request from controller: name, status, request, priorities 
-    #  * Resuorce list: resources
+    #  * Resource list: resources
     #
     string name
     uint8 status
@@ -255,14 +256,15 @@ float64[] playtime
 **Замечание**: Более машинное представление ресурсов --- ID и битовые векторы. Однако такой подход подразумевает необходимость 
 общих средств преобразования их в имена.
 
-### ResourceRequest)
+### ResourceRequest
 
-**Семантика**: Запрос ресурсов у арбитра. Уведомляет арбитр о желании получить некий набор ресурсов и приоритет. 
-Задаются два приоритета: приоритет при ожидании активации и приоритет в активном стоянии. Подробнее в [переключении походок](gait-switchong).`
+**Семантика**: Запрос ресурсов у арбитра. Уведомляет арбитр о желании получить некий набор ресурсов и приоритеты каждого одельного 
+ресурса (их важность для компонента). Задаются два приоритета: приоритет при ожидании активации и приоритет в активном стоянии. 
+Подробнее в [переключении походок](gait-switchong).`
 
-    # Resource assigment request.
-    #  * requester_name --- name of the controller component emmiting request.
-    #  * resourses --- resources set (kinematic chains names: leg1, leg2, ..., tail, eyes).
+    # Resource assignment request.
+    #  * requester_name --- name of the controller component emitting request.
+    #  * resources --- resources set (kinematic chains names: leg1, leg2, ..., tail, eyes).
     #  * pending_pri --- priorities in pending state (same size as resources).
     #  * operational_pri --- priorities in operational state (same size as resources).
 
@@ -273,17 +275,22 @@ float64[] playtime
 
 ### ResourceRequesterState
 
-**Семантика**: Уведомление арбитр о согласии с выделенным набором ресурсов (компонент остается активен) и о деактивации компонента.
+**Семантика**: Испльзуется для уведомления арбитра о согласии с выделенным набором ресурсов (компонент остается активен) 
+и о деактивации компонента.
 
-    # Acknowledge of ResourceList (is_operational = true) or notification about deactivation (is_operational = false).
+    # Acknowledge of ResourceAssigment (is_operational = true) or notification about deactivation (is_operational = false).
+    string requester_name 
     bool is_operational
 
-### ResourceRequesterState
+**Замечание**: сообщение может быть объединено с `ResourceRequest`. 
+Тогда компонент может отказаться от части выделенных ему ресурсов. 
+
+### ResourceAssignment
 
 **Семантика**: Распределение ресурсов между задатчиками.
 
-    # Resource assigment to controllers.
-    #  * resource --- assigment resources list.
+    # Resource assignment to controllers.
+    #  * resource --- assignment resources list.
     #  * owner --- owner controller name.
     string[] resource
     string[] owner
