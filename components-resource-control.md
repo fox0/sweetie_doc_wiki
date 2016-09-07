@@ -70,6 +70,10 @@
 
 Пример реализации задатчика:
 
+    bool startHook() {
+         vector<string> res = { "leg1", "tail" };
+         req resource_client->uestResources(res);
+    }
     bool hookResourceChange() {
         return resource_client->hasResource("leg1") && ... 
     }
@@ -87,6 +91,10 @@
             }
         }
     }
+
+    stopHook() {
+         resource_client->stopOperational();
+     }
 
 Серверная часть: компонент `resources_arbiter`
 ---------------------------------------------
