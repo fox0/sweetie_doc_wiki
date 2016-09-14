@@ -34,7 +34,7 @@
 1. Предоставляет: `bool requestResources(strings req [, ints pri1, ints pri2] )` --- изменить состав ресурсов, формирует запрос `ResourseRequest` и отправляет его арбитру. 
 1. Предоставляет: `bool stopOperational()` --- уведомить арбитр о деактивации (посылает `ResourseRequesterStatus`)
 1. Предоставляет: `bool isOperational()` 
-1. Предоставляет: `bool hasResource(string res)` 
+1. Предоставляет: `bool hasResource(string res)`, `bool hasResources(strings  res)`
 1.  Обработка сообщений арбитра.
      
      Предоставляет: `void step()` --- функция, которая должна переодически вызываться в `updateHook()`.
@@ -72,7 +72,7 @@
 
     bool startHook() {
          vector<string> res = { "leg1", "tail" };
-         req resource_client->uestResources(res);
+         req resource_client->requestResources(res);
     }
     bool hookResourceChange() {
         return resource_client->hasResource("leg1") && ... 
@@ -88,6 +88,9 @@
                 if (resource_client->hasResource("tail") {
                     ...
                 }
+            }
+            else { 
+                 this->stop();  // stop component when it is nonoperational
             }
         }
     }
