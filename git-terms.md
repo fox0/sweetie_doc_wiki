@@ -75,16 +75,18 @@ main()
 **Реквест, просьба, request, pull request** — указание на то, что проблема описанная в issue решена в какой-то ветке. Если проводить аналогию, то это когда второй программист добавил кнопку и приносит на флешке исправленный код на проверку первому программисту. При помощи реквеста, тот кто решил проблему просит остальных разработчиков или кого-то конкретно, проверить его решение и высказать своё мнение. Те кого просят (reviewers) должны либо одобрить изменение (approve), либо высказать свои пожелания в комментариях на странице реквеста. Когда реквест одобрен всеми он (автоматически) закрывает собой соответствующий issue.
 
 ### Смотри далее:
-* [Создание и работа с тестовым репозитарием](git-new-repo)
-* [Подключение к репозитарию проекта](git-connecting)
-* [Типичные операции с репозитарием](git-typical-operations)
-* [Поток разработки](git-workflow)
-* [Обзор некоторых рабочих процессов с Git](https://www.dropbox.com/s/162k1y2touadll0/%D0%BD%D0%B5%D0%BA%D0%BE%D1%82%D0%BE%D1%80%D1%8B%D0%B5%20%D1%80%D0%B0%D0%B1%D0%BE%D1%87%D0%B8%D0%B5%20%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D1%81%D1%81%D1%8B%20%D1%81%20git.pdf?dl=0)
+* [Установка git на linux](git-install-linux);
+* [Установка git на windows](git-install-windows);
+* [Создание и работа с тестовым репозитарием](git-new-repo);
+* [Описание репозитариев проекта](git-project-repos);
+* [Типичные операции с репозитарием](git-typical-operations);
+* [Поток разработки](git-workflow);
+* [Обзор некоторых рабочих процессов с Git](https://www.dropbox.com/s/162k1y2touadll0/%D0%BD%D0%B5%D0%BA%D0%BE%D1%82%D0%BE%D1%80%D1%8B%D0%B5%20%D1%80%D0%B0%D0%B1%D0%BE%D1%87%D0%B8%D0%B5%20%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D1%81%D1%81%D1%8B%20%D1%81%20git.pdf?dl=0).
 
 ### Дополнительные материалы:
-* [Wikipedia: Система контроля версий](https://ru.wikipedia.org/wiki/%D0%A1%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0_%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F_%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F%D0%BC%D0%B8)
-* [Wikipedia: Git](https://ru.wikipedia.org/wiki/Git)
-* [Книга: Pro Git](https://git-scm.com/book/ru/v1)
-* [Туториалы](https://githowto.com/ru)
-* [Видео уроки](https://www.youtube.com/watch?v=PEKN8NtBDQ0&list=PLY4rE9dstrJyTdVJpv7FibSaXB4BHPInb)
-* [Туториалы на английском](https://www.atlassian.com/git/tutorials/)
+* [Wikipedia: Система контроля версий](https://ru.wikipedia.org/wiki/%D0%A1%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0_%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F_%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F%D0%BC%D0%B8);
+* [Wikipedia: Git](https://ru.wikipedia.org/wiki/Git);
+* [Книга: Pro Git](https://git-scm.com/book/ru/v1);
+* [Туториалы](https://githowto.com/ru);
+* [Видео уроки](https://www.youtube.com/watch?v=PEKN8NtBDQ0&list=PLY4rE9dstrJyTdVJpv7FibSaXB4BHPInb);
+* [Туториалы на английском](https://www.atlassian.com/git/tutorials/).
