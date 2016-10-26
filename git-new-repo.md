@@ -34,3 +34,8 @@ git commit -m "add README"
 git push -u origin master
 ```
 Содержимое файла теперь должно отображаться на странице репозитария в gitlab.
+
+### Смотри далее:
+* [Подключение к репозитарию проекта](git-connecting);
+* [Типичные операции с репозитарием](git-typical-operations);
+* [Поток разработки](git-workflow).
