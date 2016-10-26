@@ -58,10 +58,8 @@ git config --global push.default simple
 ```
 
 ### Смотри далее:
+* [Установка git на windows](git-install-windows);
 * [Создание и работа с тестовым репозитарием](git-new-repo);
-* [Подключение к репозитарию проекта](git-connecting);
+* [Описание репозитариев проекта](git-project-repos);
 * [Типичные операции с репозитарием](git-typical-operations);
 * [Поток разработки](git-workflow).
-
-### Дополнительные материалы:
-* [Установка git на windows](git-install-windows).
