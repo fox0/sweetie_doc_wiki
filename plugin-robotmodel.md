@@ -22,8 +22,13 @@
 ### Операции
 
 1. `configure()`/`cleanup()` (`OwnThread`) --- загрузка urdf, формирование цепочек (`chains`), очистка.
+
 1. `strings listChains()` (`ClientThread`) --- список цепочек.
+
+2. 
+
 1. `bool extractChain(const string& name, const JointState& in, JntArray& position, JntArray& speed, JntArray& efforts)` (`ClientThread`) --- выделение заданной кинематической цепочки.
+
 1. `bool packChain(const string& name, JntArray& position, JntArray& speed, JntArray& efforts, JointState& in)` (`ClientThread`) 
      --- обратное действие, возврат true в случае успеха (неуспех: нет цепочки, компонент не готов).
 
