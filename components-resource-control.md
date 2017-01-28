@@ -20,14 +20,18 @@
 
 Внешний интерфейс (связь с арбитром):
 
-Выходные порты:
+### Выходные порты:
 
-1. `resource_request` (`ResourseRequest`) --- запросы ресурсов к арбитру.
+1. `resource_request` (`ResourseRequest`) --- запросы ресурсов к арбитру (вариант только с портами)
 1. `resource_requester_status` (`ResourseRequesterStatus`) --- изменение состояния компонента после перераспределения ресурсов или при деактивации.
 
-Входные порты:
+### Входные порты:
 
 1. `resource_assigment` (`ResourseAssigment`) --- ресурсов по компонентам.
+
+### Операции:
+
+1. Требует `resourceRequest` (`uint32 resourceRequest(ResourseRequest)`) --- запросы ресурсов к арбитру, возвращает номер запроса (вариант c операциями)
 
 Внутренний интерфейс (связь с кодом задатчика):
 
@@ -111,12 +115,16 @@
 
 ### Входные порты
 
-1. `resource_request` (`ResourseRequest`) --- запросы ресурсов к арбитру.
+1. `resource_request` (`ResourseRequest`) --- запросы ресурсов к арбитру (вариант только с портами).
 1. `resource_requester_status` (`ResourseRequesterStatus`) --- изменение состояния компонента после перераспределения ресурсов или при деактивации.
 
 ### Выходные порты
 
 1. `resource_assigment` (`ResourseAssigment`) --- ресурсов по компонентам.
+
+### Операции:
+
+1. Предоставляет `resourceRequest` (`uint32 resourceRequest(ResourseRequest)`) --- запросы ресурсов к арбитру, возвращает номер запроса (вариант c операциями)
 
 ### Параметры
 

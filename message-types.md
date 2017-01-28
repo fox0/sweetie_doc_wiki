@@ -221,41 +221,6 @@ float64[] playtime
 Эти сообщения используются для переключения походок и анимаций. Пока приводится только сообщение базового варианта архитектуры c
 с вытесняющей моделью распределения.
 
-### ResourceList
-**`Внимание! Сообщение не используется в последней версии архитектуры!`**
-
-**Семантика**: универсальное сообщение, используется для уведомления о запросах компонента на ресурсы,
-уведомления о деактивации компонента (освобождении ресурсов), передачи списка ресурсов.
-
-    # Set of resources and status of controllers.
-    #  * name --- name of the controller component emmiting request.
-    #  * status --- state of the controller component emmiting request.
-    #  * resources --- resources set (kinematic chains names: leg1, leg2, ..., tail, eyes).
-    #  * pending_pri --- priorities in pending state
-    #  * operational_pri --- priorities in operational state
-    #
-	#  Only necessary fields are filled. Possible sets are:
-    #  * Deactivating notification from controller: name, status
-    #  * Resource request from controller: name, status, request, priorities 
-    #  * Resource list: resources
-    #
-    string name
-    uint8 status
-    string[] resources
-    uint8[] pending_pri 
-    uint8[] operational_pri 
-    # statuses
-    uint8 NONOPERATIONAL=0
-    uint8 OPERATIONAL=1
-    uint8 PENDING=2
-
-**Замечание**. Заполняются только необходимые поля.
-
-**Замечание**. Последние два поля нужны только для системы с приоритетами.
-
-**Замечание**: Более машинное представление ресурсов --- ID и битовые векторы. Однако такой подход подразумевает необходимость 
-общих средств преобразования их в имена.
-
 ### ResourceRequest
 
 **Семантика**: Запрос ресурсов у арбитра. Уведомляет арбитр о желании получить некий набор ресурсов и приоритеты каждого одельного 
@@ -264,14 +229,21 @@ float64[] playtime
 
     # Resource assignment request.
     #  * requester_name --- name of the controller component emitting request.
+	#  * request_id --- high 16 bits contains controller request counter number, low 16 bits contains an unique requester indentifer.
     #  * resources --- resources set (kinematic chains names: leg1, leg2, ..., tail, eyes).
     #  * pending_pri --- priorities in pending state (same size as resources).
     #  * operational_pri --- priorities in operational state (same size as resources).
+    #
+    # request_id is optional if operation is used to emmit request.
+    #
 
     string requester_name 
+	uint32 request_id
     string[] resource
     float[] pri_operational
     float[] pri_pending
+
+**Замечание**: `request_id` необходим для контроля соответсвий `ResourceRequest` -- `ResourceAssignment` -- `ResourceRequesterState`.
 
 ### ResourceRequesterState
 
@@ -279,7 +251,13 @@ float64[] playtime
 и о деактивации компонента.
 
     # Acknowledge of ResourceAssigment (is_operational = true) or notification about deactivation (is_operational = false).
+    #  * requester_name --- name of the controller component emitting request.
+	#  * request_id / request_number --- the indentifer of last ResourceRequester emitted by controller, 
+    #       or resource arbiter request counter value from ResourceAssigment message.
+    #  * is_operational --- flag operational state.
+    
     string requester_name 
+    uint32 request_id / uint32 request_number
     bool is_operational
 
 **Замечание**: сообщение может быть объединено с `ResourceRequest`. 
@@ -291,8 +269,11 @@ float64[] playtime
 
     # Resource assignment to controllers.
     #  * resource --- assignment resources list.
+    #  * request_id/request_number --- the list of indentifers of last ResourceRequests of pending controllers
+    #       or resource arbiter request counter value from ResourceAssigment message.
     #  * owner --- owner controller name.
     string[] resource
+    uint32[] request_id / uint32 request_number
     string[] owner
 
 ## Тактирование и синхронизация
