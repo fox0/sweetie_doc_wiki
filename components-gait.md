@@ -147,7 +147,7 @@
 Ожидающая цель тоже одна. Новая цель отменяет текущую ожидающую и занимает ее место. По этому событияю вызывается `newGoalHook`.
 
 Диаграмма состояний `OrocosSimpleActionServer`:
-[!orocos-actionlib-statechart.png](orocos-actionlib-statechart.png)
+![orocos-actionlib-statechart.png](orocos-actionlib-statechart.png)
 
 ### Пример использования
 

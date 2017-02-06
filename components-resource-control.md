@@ -75,7 +75,7 @@
 и на основе этого меняет состояние задачика и посылается `ResourseRequesterStatus`. 
 
 Диаграмма состояний клиента приведена ниже:
-[!resource-client-statechart.png](resource-client-statechart.png)
+![resource-client-statechart.png](resource-client-statechart.png)
 
 ### Детали реализации.
 
