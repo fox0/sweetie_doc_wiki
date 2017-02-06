@@ -37,8 +37,8 @@
 
 1. Предоставляет: `bool requestResources(strings req [, ints pri1, ints pri2] )` --- изменить состав ресурсов, формирует запрос `ResourseRequest` и отправляет его арбитру. 
 1. Предоставляет: `bool stopOperational()` --- уведомить арбитр о деактивации (посылает `ResourseRequesterStatus`)
-1. Предоставляет: `bool isOperational()` 
-1. Предоставляет: `bool getState()` --- возвращает сотоние: "non operational", "pending", "opertional" 
+1. Предоставляет: `bool isOperational()` --- возвращает true в сотоянии "opertional" и "operational pending".
+1. Предоставляет: `bool getState()` --- возвращает соcтоние: "non operational", "pending", "opertional", "operational pending"
 1. Предоставляет: `bool hasResource(string res)`, `bool hasResources(strings  res)`
 1.  Обработка сообщений арбитра.
      
@@ -50,12 +50,16 @@
 
 1. Средства уведомления пользовательского кода о изменении набора ресурсов.
 
-    Требует (опционально): `bool hookResourceChange()` --- пользовательский callbcak, вызываемый при изменении состава ресурсов.
-     Пользовательский код возвращает `true`, если компонент остается активен. 
+    1. Требует (опционально): `bool resourceChangeHook()` --- операция компонента-владельца сервиса, используемая как пользовательский callback, 
+        вызываемая при изменении состава ресурсов.  Пользовательский код возвращает `true`, если компонент остается активен. 
+    2. Требует (опционально): `void stopOperationalHook()` --- операция компонента-владельца сервиса, используемая как пользовательский callbcak, 
+        вызываемый при переходе в состояний "non opertional".
+    Плагин сам проверяет наличие этих операций в интерфейсе компонента  и присоединяется к ним.
 
      ИЛИ
-
-     Метод: `void setResourceChangeHook(bool (*hookResourceChange)())
+    
+    1. Метод: `void setResourceChangeHook(boost::function<bool()> resourceChangeHook)
+    2. Метод: `void setStopOperationalHook(boost::function<void()> stopOperationalHook)
 
 ### Семантика исполнения
 
@@ -88,9 +92,8 @@
         resource_client->step();
 
         if (sync_port.read(sync_msg, false)) {
-            if (resource_client->isOperational()) {
-                ...
-                ref_joints_port.write(ref_joints);
+            if (resource_client->getState() & ResourceClient::OPERATIONAL) {
+                ...  ref_joints_port.write(ref_joints);
                 if (resource_client->hasResource("tail") {
                     ...
                 }
