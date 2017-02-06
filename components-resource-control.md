@@ -53,7 +53,7 @@
     1. Требует (опционально): `bool resourceChangeHook()` --- операция компонента-владельца сервиса, используемая как пользовательский callback, 
         вызываемая при изменении состава ресурсов.  Пользовательский код возвращает `true`, если компонент остается активен. 
     2. Требует (опционально): `void stopOperationalHook()` --- операция компонента-владельца сервиса, используемая как пользовательский callbcak, 
-        вызываемый при переходе в состояний "non opertional".
+        вызываемый при переходе в состояние "non opertional".
     Плагин сам проверяет наличие этих операций в интерфейсе компонента  и присоединяется к ним.
 
      ИЛИ
@@ -74,6 +74,9 @@
 Если `hookResourceChange` не реализован, то проверяает наличие последних запрошенных ресурсов 
 и на основе этого меняет состояние задачика и посылается `ResourseRequesterStatus`. 
 
+Диаграмма состояний клиента приведена ниже:
+[!resource-client-statechart.png](resource-client-statechart.png)
+
 ### Детали реализации.
 
 Вероятно, набор ресурсов проще всего хранить и передаваить в `set<string>` или `map<string>`
@@ -92,13 +95,13 @@
         resource_client->step();
 
         if (sync_port.read(sync_msg, false)) {
-            if (resource_client->getState() & ResourceClient::OPERATIONAL) {
+            if (resource_client->getState() & OPERATIONAL) {
                 ...  ref_joints_port.write(ref_joints);
                 if (resource_client->hasResource("tail") {
                     ...
                 }
             }
-            else { 
+            else if (resource_client->getState() == NONOPERATIONAL) {
                  this->stop();  // stop component when it is nonoperational
             }
         }
