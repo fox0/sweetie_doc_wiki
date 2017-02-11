@@ -40,6 +40,7 @@
         1. [Компоненты задатчиков](components-gait)
         1. [Список задатчиков](components-gaits-and-animations)
         1. [Компонент-арбитр ресурсов](components-resource-control)
+        1. [Подсистема исполнения сохраненных движений](components-animation-stored-move)
         1. [Плагин с кинодинамической моделью робота](plugin-robotmodel)
         1. [Компоненты кинематики `kinematics`](components-kinematics)
         1. [Компонент расчета динамики `dynamics_inv`](components-dynamics)
