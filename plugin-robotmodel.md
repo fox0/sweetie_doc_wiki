@@ -19,17 +19,23 @@
       |  \- parameter1 (игнорируется)
       \- chain2_name
 ```
-### Операции
+### Операции (предоставляет)
 
-1. `configure()`/`cleanup()` (`OwnThread`) --- загрузка urdf, формирование цепочек (`chains`), очистка.
+1. `configure()/cleanup()` (`OwnThread`) --- загрузка urdf, формирование цепочек (`chains`), очистка.
 
-1. `strings listChains()` (`ClientThread`) --- список цепочек.
+2. `strings listChains()` (`ClientThread`) --- список цепочек.
 
-2. 
+3. `strings listJoints(const string& name)`  (`ClientThread`) --- список звеньев.
 
-1. `bool extractChain(const string& name, const JointState& in, JntArray& position, JntArray& speed, JntArray& efforts)` (`ClientThread`) --- выделение заданной кинематической цепочки.
+3. `string getJointChain(const string& name)`  (`ClientThread`) --- возвращает имя цепочки-владельца звена, пустую строку, если звена нет.
 
-1. `bool packChain(const string& name, JntArray& position, JntArray& speed, JntArray& efforts, JointState& in)` (`ClientThread`) 
+4.  `strings listAllJoints()` (`ClientThread`) --- список всех звеньев.
+
+5.  `int getJointPos(const string& name)` (`ClientThread`) --- возвращает позицию звена в упрядоченной в соответвие с принятыми соглашения позе ротбота, -1 в случае ошибки.
+
+6. `bool extractChain(const string& name, const sensor_msgs::JointState& joint_state, JntArray& position, JntArray& velocity, JntArray& effort)` (`ClientThread`) --- выделение заданной кинематической цепочки.
+
+7. `bool packChain(const string& name, JntArray& position, JntArray& speed, JntArray& efforts, JointState& in)` (`ClientThread`) 
      --- обратное действие, возврат true в случае успеха (неуспех: нет цепочки, компонент не готов).
 
 Из интерфейса исключен `JointLimbState` по следующим причинам: 
@@ -38,14 +44,13 @@
 * вариант с `JointLimbState` не способен исключить динамическое выделение памяти.
 
 **Замечание**: можно реализовать на операциях интерфейс добавления цепочек.
-1. `addChain(string name)`, `removeChain(string name)` добавление/удаление динамических параметров для ручного использования (вспомогательный класс). 
- Создает необходимый набор дочерних параметров цепочки (`first_link`,...). Изменяет только опции, для перенастройки требуется вызов `configure`.
+1. `addChain(string name)`, `removeChain(string name)` добавление/удаление динамических параметров для ручного использования (вспомогательный класс).  Создает необходимый набор дочерних параметров цепочки (`first_link`,...). Изменяет только опции, для перенастройки требуется вызов `configure`.
 
-### Поля
+### Поля (внутренний интерфейс сервиса)
 
 1. `chains` (`map<string,KDL::Chain *>`) --- кинематические цепочки.
 
-### Методы
+### Методы (внутренний интерфейс сервиса)
 
 2. `KDL::Chain& getCahin(const string& name)`  --- доступ к цепочкам, не может быть реализован как операция.
 2. `PropertyBag& getCahinProperties(const string& name)` --- упрощение доступа к дополнительными параметрам цепочки.
