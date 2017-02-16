@@ -36,7 +36,7 @@
 
 **Внутренний интерфейс (связь с кодом задатчика)**:
 
-1. Метод: `bool requestResources(strings req [, ints pri1, ints pri2] )` --- изменить состав ресурсов, формирует запрос `ResourseRequest` и отправляет его арбитру, не для внешнего использования.
+1. Метод: `uint32 requestResources(strings req [, ints pri1, ints pri2] )` --- изменить состав ресурсов, формирует запрос `ResourseRequest` и отправляет его арбитру, не для внешнего использования. Возвращает идентификатор запроса (`request_id` см. в [переключение задатчиков](gait-switching)) или ноль, если запрос не может быть выполнен (порт не подключен).
 1. Метод: `bool stopOperational()` --- уведомить арбитр о деактивации (посылает `ResourseRequesterStatus`), не для внешнего использования.
 1. Предоставляет: `bool isOperational()` --- возвращает true в состояние "opertional" и "operational pending".
 1. Предоставляет: `bool getState()` --- возвращает состояние: "non operational", "pending", "opertional", "operational pending"
