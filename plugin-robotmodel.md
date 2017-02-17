@@ -33,7 +33,7 @@
 
 4.  `strings listAllJoints()` (`ClientThread`) --- список всех звеньев.
 
-5.  `int getJointPos(const string& name)` (`ClientThread`) --- возвращает позицию звена в упорядоченной в соответствие с принятыми соглашения позе робота, -1 в случае ошибки.
+5.  `int getJointIndex(const string& name)` (`ClientThread`) --- возвращает позицию звена в упорядоченной в соответствие с принятыми соглашения позе робота, -1 в случае ошибки.
 
 6. `bool extractChain(const string& name, const sensor_msgs::JointState& joint_state, JntArray& position, JntArray& velocity, JntArray& effort)` (`ClientThread`) --- выделение заданной кинематической цепочки.
 
