@@ -276,6 +276,39 @@ float64[] playtime
     uint32[] request_id / uint32 request_number
     string[] owner
 
+### ControllersState
+
+**Семантика**: публикуемый арбитром статус задатчиков.
+
+**Прагматика**: может быть использован для мониторинга состояний компонент.
+
+    # Controllers state message. It is published by ResourceArbiter on any controller state change. All arrays have same length.
+    # * name --- list of controllers.
+    # * state --- controler states.
+    # * request_id --- ID of last message exchange with controller.
+    # request_id increases with each resource request. It must be equal to or greater then request_id from ResourceRequests 
+    # if given request was processed by arbiter and confirmation form controller is received.
+	string[] name
+    uint32[] request_id
+    uint8[] state
+
+**Замечание**: если сторонний компонент занает `request_id` последнего `ResourceRequests` задатчика, то сравнивая его с `request_id` из этого сообщения,
+можно понять, был ли обработан запрос и получено подтверждение состояния задатчика. Если `request_id` из сообщения больше или равно `request_id` из запроса,
+то запрос был обработан.
+
+### SetOperational (ROS service)
+
+**Семантика**: команда активации/деактивации задатчика.
+
+**Прагматика**: без знания `request_id` высокий уровен не сможет из сообщения `ControllersState` понять, обработан ли конкретный запрос ресурсов.
+
+    # Activation/deactivation command for controller.
+    #  * is_operational --- target controller state.
+    #  * request_id --- resource request id or zero in case of failure. 
+    bool is_operational
+    --
+    uint32 request_id
+
 ## Тактирование и синхронизация
 
 ### TimerEvent
