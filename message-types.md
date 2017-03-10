@@ -282,7 +282,7 @@ float64[] playtime
 
 **Прагматика**: может быть использован для мониторинга состояний компонент.
 
-    # Controllers state message. It is published by ResourceArbiter on any controller state change. All arrays have same length.
+    # Controllers state message published by ResourceArbiter on any controller state change. All arrays have the same length.
     # * name --- list of controllers.
     # * state --- controler states.
     # * request_id --- ID of last message exchange with controller.
@@ -291,6 +291,11 @@ float64[] playtime
 	string[] name
     uint32[] request_id
     uint8[] state
+    # state constants
+    uint8 NONOPERATIONAL=0
+    uint8 PENDING=1
+    uint8 OPERATIONAL=2
+    uint8 OPERATIONAL_PENDING=3
 
 **Замечание**: если сторонний компонент занает `request_id` последнего `ResourceRequests` задатчика, то сравнивая его с `request_id` из этого сообщения,
 можно понять, был ли обработан запрос и получено подтверждение состояния задатчика. Если `request_id` из сообщения больше или равно `request_id` из запроса,
