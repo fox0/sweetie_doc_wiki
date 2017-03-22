@@ -192,6 +192,92 @@ float64[] playtime
 
 **Замечание**: можно отказаться от `name`, но тогда будут сложности с расширением массива датчиков касания.
 
+## Действия и траектоии 
+
+#### Траектория в угловой системе координат
+
+Используются сообщения из [`control_msgs`](http://docs.ros.org/api/control_msgs/html/index-msg.html)
+
+**Семантика**: 
+* `control_msg::FollowJointTrajectoryGoal` --- траектория в угловой СК с информацией о требованиях к ее исполнению.
+* `control_msg::FollowJointTrajectory` --- действие `actionlib` по исполнению траектории в угловой СК.
+
+**Прагматика**: эти типы сообщений и действий используются `MoveIt!.
+
+Сообщение `FollowJointTrajectoryGoal`:
+
+    trajectory_msgs/JointTrajectory trajectory  # непосредственно траектория, массив JointState, снабженный метками времени
+    JointTolerance[] path_tolerance             # допустимая ошибка для каждого сочленения при исполнении
+    JointTolerance[] goal_tolerance             # допустимая ошибка для каждого сочленения в конце траектории
+    duration goal_time_tolerance                # допустимое отклонение по времени
+
+Поле `path_tolerance` используются для проверки начальных условий исполнения траектории и последующего  контроля движения. 
+`goal_tolerance` проверяется по окончанию движения. 
+
+#### Текстовое действие
+
+**Семантика**: любое действие, задаваемое текстовым идентификатором. Такие действия могут использованы для выбора траектории среди сохраненных, выбора анимации изображений глаз.
+
+**Замечание**: надо поискать в ROS аналоги.
+
+**Замечание**: возможно расширение за счет введения параметров в виде пар строка и число или строка и строка.
+
+
+**`TextCommand`** --- базовая текстовая команда.
+ 
+    # Command identified by text string.
+    #
+    #  * type --- type of action. 
+    #  * command --- text action identificator. A
+    #  * args --- optional arguments names or list of arguments.
+    #  * values --- optianal arguments values.
+    #
+    #  Usage of args is not recommended. Text indentifer sould have clear and definite semantic without any arguments.
+    #  
+    #  Example: { type : eyes/emotion, command: happy }
+    #  Example: { type : joint_trajectory, command: greeting }
+    #  
+    string type
+    string command
+    strings args[]
+    float64 values[]
+
+
+**`TextCommandStamped`** --- текстовая команда, привязанная ко времени. 
+
+    TextActionGoal command
+    duration time_from_start
+
+
+**`TextAction`** --- текстовое действие `actionlib`
+ 
+    TextCommand command
+    ---
+    string status
+    ---
+    int32 error_code
+    string error_string
+
+**Замечание**: наилучший способ представления `Feedback` и `Result` не ясен из-за разнородности возможных команд. 
+
+**TODO**: добавить совместимость с `FollowJointTrajectoryResult` по структуре полей.
+
+#### Траектория в угловой СК с текстовыми действиями
+
+**Семантика**: задает движение робота с сопутствующими действиями (смены анимаций, режимов работы и т.п.)
+
+**`FollowJointTrajectoryWithActions`**  --- действие `actionlib` для траектории с информацией о дополнительных действиях. 
+
+    FollowJointTrajectoryGoal trajectory
+    TextCommandStamped[] text_commands
+    ---
+    FollowJointTrajectoryResult trajectory
+    ---
+    FollowJointTrajectoryFeedback trajectory
+
+
+**`FollowJointTrajectoryWithActionsGoal`**  --- траектория в угловой СК и информацией о дополнительных действиях.
+
 
 ## Состояние робота: декоративные элементы
 
@@ -199,21 +285,17 @@ float64[] playtime
 
 ### Уши и хвост
 
-Для управления хвостом и ушами (в совокупности) можно использовать сообщения `JointState` или `JointLimbState`.
+Для управления хвостом и ушами (в совокупности) можно использовать сообщения `JointState`.
 
 ### Глаза
 
-Для управления направлением взгляда теоретически можно использовать `JointState` (или `JointLimbState`) и `CartesianState`. 
-Действительно, положение зрачка задается двумя углами, либо точкой в пространстве, куда направлен взгляд.
+* Для управления направлением взгляда используется `gemetry_msg::Point` или `sensor_msg::JointState`, 
+    В обоих случаях передаются 3 числа --- положение точки фокуса относительно головы. `JointState` 
+    удобнее за счет возможности использования стандартной системы управления движением.
 
-Однако, существуют еще ряд параметров: положение века, его ориентация, диаметр зрачка. Также особые эффекты. 
+* Общее состояние глаза: `TextCommand` с типом `eyes/emotion`.
 
-    Формат сообщения подлежит определению. 
-
-**Альтернативы**:
-
-1. Использование геометрических сообщений и дополнительных сообщений с описанием эмоции.
-2. Большие сообщения для управления глазами.
+* Отдельная анимация: `TextCommand` с типом `eyes/animation`.
 
 
 ## Распределение ресурсов

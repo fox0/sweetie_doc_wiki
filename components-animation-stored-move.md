@@ -75,83 +75,20 @@
 
 ### Типы данных
 
-#### Траектория в угловой системе координат
+Подробнее в [типы данных](message-types)
 
-Используются сообщения из [`control_msgs`](http://docs.ros.org/api/control_msgs/html/index-msg.html)
+* **Траектория в угловой системе координат**
+    * `control_msg::FollowJointTrajectoryGoal` --- траектория в угловой СК с информацией о требованиях к ее исполнению.
+    * `control_msg::FollowJointTrajectory` --- действие `actionlib` по исполнению траектории в угловой СК.
 
-**Семантика**: 
-* `control_msg::FollowJointTrajectoryGoal` --- траектория в угловой СК с информацией о требованиях к ее исполнению.
-* `control_msg::FollowJointTrajectory` --- действие `actionlib` по исполнению траектории в угловой СК.
+* **Текстовое действие**
+    * `TextCommand`* --- базовая текстовая команда.
+    * `TextCommandStamped`* --- текстовая команда, привязанная ко времени. 
+    * `TextAction`* --- текстовое действие `actionlib`.
 
-**Прагматика**: эти типы сообщений и действий используются `MoveIt!.
-
-Сообщение `FollowJointTrajectoryGoal`:
-
-    trajectory_msgs/JointTrajectory trajectory  # непосредственно траектория, массив JointState, снабженный метками времени
-    JointTolerance[] path_tolerance             # допустимая ошибка для каждого сочленения при исполнении
-    JointTolerance[] goal_tolerance             # допустимая ошибка для каждого сочленения в конце траектории
-    duration goal_time_tolerance                # допустимое отклонение по времени
-
-Поле `path_tolerance` используются для проверки начальных условий исполнения траектории и последующего  контроля движения. 
-`goal_tolerance` проверяется по окончанию движения. 
-
-#### Текстовое действие
-
-**Семантика**: любое действие, задаваемое текстовым идентификатором. Такие действия могут использованы для выбора траектории среди сохраненных, выбора анимации изображений глаз.
-
-**Замечание**: надо поискать в ROS аналоги.
-
-**Замечание**: возможно расширение за счет введения параметров в виде пар строка и число или строка и строка.
-
-
-**`TextCommand`** --- базовая текстовая команда.
- 
-    # Command text identificator.
-    #
-    #  * type --- type of action.
-    #  * command --- text action identificator.
-    string type
-    string command
-
-
-**`TextCommandStamped`** --- текстовая команда, привязанная ко времени. 
-
-    TextActionGoal command
-    duration time_from_start
-
-
-
-**`TextAction`** --- текстовое действие `actionlib`
-
- 
-    TextCommand command
-    ---
-    ---
-    int32 result
-    string result_string
-    int32 SUCCESSFUL = 0
-    int32 UNKNOWN_COMMAND = -1
-
-**Замечание**: наилучший способ представления `Feedback` и `Result` не ясен из-за разнородности возможных команд. 
-
-**TODO**: добавить совместимость с `FollowJointTrajectoryResult` по структуре полей.
-
-#### Траектория в угловой СК с текстовыми действиями
-
-**Семантика**: задает движение робота с сопутствующими действиями (смены анимаций, режимов работы и т.п.)
-
-**`FollowJointTrajectoryWithActions`*  --- действие `actionlib` для траектории с информацией о дополнительных действиях. 
-
-    FollowJointTrajectoryGoal trajectory
-    TextCommandStamped[] text_commands
-    ---
-    FollowJointTrajectoryResult trajectory
-    ---
-    FollowJointTrajectoryFeedback trajectory
-
-
-**`FollowJointTrajectoryWithActionsGoal`*  --- траектория в угловой СК и информацией о дополнительных действиях.
-
+* Траектория в угловой СК с текстовыми действиями
+    * `FollowJointTrajectoryWithActions`  --- действие `actionlib` для траектории с информацией о дополнительных действиях. 
+    * `FollowJointTrajectoryWithActionsGoal`  --- траектория в угловой СК и информацией о дополнительных действиях.
 
 
 Задатчик `AnimationJointTrajectory` (исполнение действия `FollowJointTrajectory`)
