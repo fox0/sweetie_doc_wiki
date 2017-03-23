@@ -230,12 +230,12 @@
 
 ### Сервисы
 
-1. Требует: `torque_off` (`std_srv::SetBool`) --- активация/декактивация задатчика `TorqueMainSwitch`, отключающего приводы.
+1. Требует: `set_torque_off` (`std_srv::SetBool`) --- активация/декактивация задатчика `TorqueMainSwitch`, отключающего приводы.
 
 ### Действия 
 
-1. Требует: `follow_trajectory_virtual` (`FollowJointTrajectoryAction`) --- передать траекторию виртуальному роботу.
-1. Требует: `follow_trajectory` (`FollowJointTrajectoryAction`) --- передать траекторию реальному роботу.
+1. Требует: `joint_trajectory_virtual` (`FollowJointTrajectoryAction`) --- передать траекторию виртуальному роботу.
+1. Требует: `joint_trajectory_real` (`FollowJointTrajectoryAction`) --- передать траекторию реальному роботу.
 
 ### Параметры
 
