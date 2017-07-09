@@ -120,6 +120,31 @@ float64[] playtime
 
 **Замечание**: реализация playtime с одним элементом не необходима. 
 
+### ServoModel
+
+
+**Семантика**: 7-параметрическая модель привода с системой управления, учитывает П-регулятор, силу трения (вязкую, кулона, штрибека) [Compliant Robot Behavior using Servo Actuator
+Models identified by Iterative Learning Control].
+
+**Прагматика**: представляет модель привода в компактной человекочитаемой форме. Облегчает назначение параметров пиводов и передачу их между компонентами.
+
+```
+# Servo model parameters.
+#
+#  * name --- servo identification string.
+#  * kp --- proportional coefficient of servo P-regulator.
+#  * kgear --- ratio of reduction gear (number of turns of servo per one turn of joint)
+#  * alpha[4] --- servo model and friction parameters (identifcation result).
+#  * qs, delta --- Stribeck parameteres.
+#
+string name
+float64 kp
+float64 kgear
+float64[4] alpha
+float64 qs
+float64 delta
+```
+
 ### JointState
 
 **Семантика**: вектор состояния всего робота или его части в угловой СК. Включает позицию, скорость и момент приводов, но при этом 
