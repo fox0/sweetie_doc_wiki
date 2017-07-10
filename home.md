@@ -40,6 +40,7 @@
     4. Детали реализации: подсистема управления движением
         1. [Типы сообщений подсистемы управления движением](message-types)
         1. [Компонент агрегатор позы `agregator_gait`](components-agregator-gait)
+        1. [Одометрия по задющему воздействию](components-odometry-fake)
         1. [Компоненты задатчиков](components-gait)
         1. [Список задатчиков](components-gaits-and-animations)
         1. [Компонент-арбитр ресурсов](components-resource-control)
@@ -48,6 +49,7 @@
         1. [Компоненты кинематики `kinematics`](components-kinematics)
         1. [Компонент расчета динамики `dynamics_inv`](components-dynamics)
         1. [Компонент обращения модели приводов `servo_inv`](components-servo-inv)
+        1. [Компонент идентификации модели приводов `servo_ident`](components-servo-ident)
         1. [Компонент-интерфейс приводов `herkulex_`](components-herkulex-alt) 
         1. [Компонент таймера](components-timer) 
         1. [Вспомогательная библиотека: фильтры](library-filters)
