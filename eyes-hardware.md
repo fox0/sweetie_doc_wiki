@@ -178,3 +178,8 @@
     (настраивается через командную строку в опциях Qt http://blog.qt.io/blog/2009/12/16/qt-graphics-and-performance-an-overview/ ).
 
 4. Возможен ли подходящий режим альфа-смешения для поканального разделения изображения? Насколько сложны и длительны попиксельные операции в побайтном разделении по сравнению с поканальным?
+
+
+## Ссылки по теме:
+http://processors.wiki.ti.com/index.php/GPU_Compositing
+http://blog.qt.io/blog/2009/11/20/building-qt-to-make-use-of-the-beagle-boards-sgx-gpu/
