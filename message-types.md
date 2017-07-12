@@ -123,7 +123,8 @@ float64[] playtime
 ### ServoModel
 
 
-**Семантика**: 7-параметрическая модель привода с системой управления, учитывает П-регулятор, силу трения (вязкую, кулона, штрибека).
+**Семантика**: 7-параметрическая модель привода с системой управления, учитывает П-регулятор, силу трения (вязкую, Кулона, Штрибека) [Compliant Robot Behavior using Servo Actuator
+Models identified by Iterative Learning Control].
 
 **Прагматика**: представляет модель привода в компактной человекочитаемой форме. Облегчает назначение параметров пиводов и передачу их между компонентами.
 
@@ -132,20 +133,18 @@ float64[] playtime
 #
 #  * name --- servo identification string.
 #  * kp --- proportional coefficient of servo P-regulator.
-#  * kgear --- gear ratio of 
-#  * alpha --- linear parameters 
-#  * playtime --- movement duration (s).
+#  * kgear --- ratio of reduction gear (number of turns of servo per one turn of joint)
+#  * alpha[4] --- servo model and friction parameters (identifcation result).
+#  * qs, delta --- Stribeck parameteres.
 #
-# Arrays sould have the same size. Only exception is playtime, which can alse contains one value 
-# if movement duration is equal for all servos. 
-#
-Header header
-string[] name
-float64[] target_position
-float64[] playtime
+string name
+float64 kp
+float64 kgear
+float64[4] alpha
+float64 qs
+float64 delta
 ```
 
-**Замечание**: реализация playtime с одним элементом не необходима. 
 ### JointState
 
 **Семантика**: вектор состояния всего робота или его части в угловой СК. Включает позицию, скорость и момент приводов, но при этом 
@@ -167,28 +166,29 @@ float64[] playtime
 *Порядок сортировки*: сначала идут приводы кинематических цепочек. Сами цепочки и последовательность их следования задается при помощи парaметра `chains` в плагине `RobotModel`.
 Порядок приводов в цепочке естественный (от начала к концу).  После цепочек идут "свободные" приводы из URDF в произвольном порядке. 
 
-### CartesianState
+### MultiDOFJointState
 
 **Семантика**: векторы состояния группы кинематической цепочки в декартовой СК. Положение, ориентация, скорость конца цепочки относительно ее основания. 
 Цепочка задается именем.
 
-**Прагматика**: В текущем проекте все кинематические цепочки имеют тело робота в качестве основания. Имя цепочки можно отождествлять с именем последнего сегмента.
+**Прагматика**: Стандартный тип ROS `sensor_msg::MultiDOFJointState`. В текущем проекте все кинематические цепочки имеют тело робота в качестве основания. Имя цепочки задано при помощи `RobotModel`.
 При генерации походок перемещение конечности удобно задавать относительно тела робота.
 
      # State vectors of the group of kinematics chains. It is assumed that all chains are linked to robot frame.
-     #  * name --- the name of kinematic chain.
-     #  * position --- the last segment pose in coordinate system of kinematic chain base (robot frame).
-     #  * speed --- the last segment speed.
-     #  * force --- external force applied to the last segment in robot frame coordinates (maybe world coordinates?)
+     #  * joint_names --- the name of kinematic chain (multiDOF joint).
+     #  * transforms --- the last segment pose in coordinate system of kinematic chain base (robot frame).
+     #  * twist --- the last segment speed.
+     #  * wrench --- force applied to the last segment in robot frame coordinates (maybe world coordinates?)
      #
      # All arrays sould have the same size. Presece of limb, position and speed fields is necessary.
-     Header header
-     string[] name
-     pose[] position
-     twist[] speed
-     # wrench[] force
 
-**Замечание**: Обязательно заполнены поля name, position, speed.
+     Header header
+     string[] joint_names
+     geometry_msgs/Transform[] transforms
+     geometry_msgs/Twist[] twist
+     geometry_msgs/Wrench[] wrench
+
+**Замечание**: Обязательно заполнены поля `joint_names`, `transforms`, `twist`.
 
 **Замечание**: Присутствие force одновременно недостаточно и избыточно. Для нормальных расчетов динамики требуется знать силы, действующие на начало и конец цепочки.
 В текущем проекте нет задач, для которых это понадобилось бы силовое взаимодействие (шлифовка, мытье полов, переноска яиц?). Однако он может использоваться вместо 
@@ -196,7 +196,7 @@ float64[] playtime
 
 ### SupportState
 
-**Семантика**: распределение веса робота по конечностям в относительных единицах измерения. 
+**Семантика**: распределение веса робота по конечностям в относительных или абсолютных единицах измерения. 
 
 **Прагматика**: инкапсулирует показания датчиков касания, передает предполагаемое распределение веса от модуля походки к модулю расчета обратной динамики (по аналогии c NimbRO-OP).
 Введение отдельного сообщения позволяет избежать необходимости включения этой информации в виде поля force в `CartesianState` и `JointLimbState`, позволяет использовать `JointState` на выходе 
@@ -204,14 +204,14 @@ float64[] playtime
 
      # Robot weight distributon between legs.
      #  * name --- the name of the chain.
-     #  * support --- leg support coefficients. Support coefficient is the ratio of 
+     #  * support --- leg support coefficients or z-component of reaction force. Support coefficient is the ratio of 
      # the weight corresponding to the leg to the total weight of robot.
      #
      # All arrays sould have the same size.
      #
      Header header
-     string[4] name
-     float64[4] support
+     string[] name
+     float64[] support
 
 **Замечание**: Принципиально возможно "занести" эти коэффициенты в CartesianState и JointLimbState, 
 однако отдельное сообщение все равно требуется для передачи выхода датчиков касания.
