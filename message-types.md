@@ -120,6 +120,32 @@ float64[] playtime
 
 **Замечание**: реализация playtime с одним элементом не необходима. 
 
+### ServoModel
+
+
+**Семантика**: 7-параметрическая модель привода с системой управления, учитывает П-регулятор, силу трения (вязкую, кулона, штрибека).
+
+**Прагматика**: представляет модель привода в компактной человекочитаемой форме. Облегчает назначение параметров пиводов и передачу их между компонентами.
+
+```
+# Servo model parameters.
+#
+#  * name --- servo identification string.
+#  * kp --- proportional coefficient of servo P-regulator.
+#  * kgear --- gear ratio of 
+#  * alpha --- linear parameters 
+#  * playtime --- movement duration (s).
+#
+# Arrays sould have the same size. Only exception is playtime, which can alse contains one value 
+# if movement duration is equal for all servos. 
+#
+Header header
+string[] name
+float64[] target_position
+float64[] playtime
+```
+
+**Замечание**: реализация playtime с одним элементом не необходима. 
 ### JointState
 
 **Семантика**: вектор состояния всего робота или его части в угловой СК. Включает позицию, скорость и момент приводов, но при этом 
