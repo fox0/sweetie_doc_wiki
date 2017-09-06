@@ -194,6 +194,32 @@ float64 delta
 В текущем проекте нет задач, для которых это понадобилось бы силовое взаимодействие (шлифовка, мытье полов, переноска яиц?). Однако он может использоваться вместо 
 структуры `SupportState`.
 
+### RigidBodyState
+
+**Семантика**: дублирует `MultiDOFJointState`. Cостояние группы кинематической цепочки в декартовой СК. Положение, ориентация, скорость конца цепочки относительно ее основания. 
+Цепочка задается именем.
+
+**Прагматика**: типы `geometry_msgs` неудобны для вычислений, требуются дополнительные преобразования для вызова функций KDL. Сообщение предполагается использовать внутри подсистемы
+OROCOS для более удобной передачи данных.
+
+     # State vectors of the group of kinematics chains. It is assumed that all chains are linked to robot frame.
+     #  * joint_names --- the name of kinematic chain (multiDOF joint).
+     #  * transforms --- the last segment pose in coordinate system of kinematic chain base (robot frame).
+     #  * twist --- the last segment speed.
+     #  * wrench --- force applied to the last segment in robot frame coordinates (maybe world coordinates?)
+     #
+     # All arrays sould have the same size. Presece of limb, position and speed fields is necessary.
+
+     Header header
+     string[] joint_names
+     kdl/Frame[] transforms
+     kdl/Twist[] twist
+     kdl/Wrench[] wrench
+
+**Замечание**: если типы KDL не поддерживаются ROS, то сообщение придется создавать штатными средствами OROCOS.
+
+**Замечание**: если отказаться от его реализации, то тип заменяется `MultiDOFJointState`.
+
 ### SupportState
 
 **Семантика**: распределение веса робота по конечностям в относительных или абсолютных единицах измерения. 
