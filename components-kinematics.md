@@ -47,17 +47,17 @@
 Все операции `ClientThread`, если они не имеют обратного эффекта на решатель (реентерабельны). 
 Такой выбор обусловлен меньшими накладными расходами при их вызове.
 
-Прямая кинематика
+Прямая кинематика: предоставляет сервис `dk`
 
 1. `solveDK(string name, JntArray, Pose)`
 1. `solveVelDK(string name, JntArray pos, JntArray vel_in, Twist vel_out)`
 1. `solveForceDK(string name, JntArray pos, JntArray efforts, Wrench force)`
 1. `solveFullDK(JointLimbState, CartesianState)`
 
-Обратная кинематика
+Обратная кинематика: предоставляет сервис `ik`
 
 1. `solveIK(string name, Pose, JntArray)`
-1. `solveIK(string name, Pose in, JntArray out, JntArray min, JntArray max)`
+1. `solveIKLimits(string name, Pose in, JntArray out, JntArray min, JntArray max)`
 1. `solveVelIK(string name, JntArray pos, Twist vel_in, JntArray vel_out)`
 1. `solveForceIK(string name, JntArray pos,, Wrench force_in, JntArray effort_out)`
 1. `solveFullIK(CartesianState, JointState)`
