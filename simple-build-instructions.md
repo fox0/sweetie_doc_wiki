@@ -35,9 +35,9 @@ catkin_make
 
 1. Удалить все ros-kinetic-rtt-* (если стоят). 
 
-1. Установить ros-kinetic-sound-play ros-kinetic-trac-ik-lib ros-kinetic-octomap-msgs libalglib-dev командой
+1. Установить дополнительные пакеты командой
 `
-sudo apt-get install ros-kinetic-sound-play ros-kinetic-trac-ik-lib ros-kinetic-octomap-msgs libalglib-dev
+sudo apt-get install ros-kinetic-sound-play ros-kinetic-trac-ik-lib ros-kinetic-octomap-msgs libalglib-dev lua-filesystem
 `
 
 1. Скачать с https://yadi.sk/d/4B_tNdTw3P73Md или ftp://xq3.ru/ros файлы ros-kinetic-orocos-toolchain_2.9.0-1_amd64.deb и 
