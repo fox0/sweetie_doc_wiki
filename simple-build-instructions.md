@@ -54,11 +54,12 @@ ros-kinetic-rtt-ros-integration_2.9.0-1~1_amd64.deb
 1. Скачать (клонировать) основной репозиторий с кодом sweetie_bot:
 `git clone https://gitlab.com/sweetiebot/sweetie_bot.git`
 
-1. Установить flexbe_behavior_engine (см. инструкцию на сайте репозитория)
-https://github.com/team-vigir/flexbe_behavior_engine
-
+1. Установить flexbe_behavior_engine и generic_flexbe_states (см. инструкцию на сайте)
+https://github.com/team-vigir/flexbe_behavior_engine.git
+https://github.com/FlexBE/generic_flexbe_states.git
     Для удобства можно воспользоваться командами (см. пункт 2)
 `
+wstool set generic_flexbe_states --git https://github.com/FlexBE/generic_flexbe_states.git
 wstool set flexbe_behavior_engine --git git://github.com/team-vigir/flexbe_behavior_engine.git
 wstool update
 cd ..
