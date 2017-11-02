@@ -37,7 +37,7 @@ catkin_make
 
 1. Установить дополнительные пакеты командой
 `
-sudo apt-get install ros-kinetic-sound-play ros-kinetic-trac-ik-lib ros-kinetic-octomap-msgs ros-kinetic-rosbridge-server libalglib-dev lua-filesystem
+sudo apt-get install ros-kinetic-sound-play ros-kinetic-trac-ik-lib ros-kinetic-octomap-msgs ros-kinetic-rosbridge-server ros-kinetic-leap-motion libalglib-dev lua-filesystem
 `
 
 1. Скачать с https://yadi.sk/d/4B_tNdTw3P73Md или ftp://xq3.ru/ros файлы ros-kinetic-orocos-toolchain_2.9.0-1_amd64.deb и 
