@@ -15,7 +15,7 @@ modification, are permitted provided that the following conditions are met:
  * Neither the name of Sweetie Bot Project nor the names of its 
    contributors may be used to endorse or promote products derived from 
    this software without specific prior written permission. 
- * Anyone who intend to use this software for any purpose must watch
+ * Anyone who intend to use this software for any purpose should watch
    at least once first 11 episodes of "My Little Pony: Friendship Is Magic"
    animated show.
 
