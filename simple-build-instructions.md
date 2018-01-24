@@ -42,9 +42,7 @@ catkin_make
 
 1. Установить дополнительные пакеты командой
 
-`
-sudo apt-get install ros-kinetic-moveit ros-kinetic-sound-play ros-kinetic-trac-ik-lib ros-kinetic-octomap-msgs ros-kinetic-rosbridge-server ros-kinetic-leap-motion libalglib-dev lua-filesystem castxml gccxml libeditline-dev libeditline0 libgmp-dev libgmpxx4ldbl liblua5.1-0 liblua5.1-0-dev libncurses5-dev libomniorb4-1 libomniorb4-dev libomnithread3-dev libomnithread3c2 libreadline-dev libreadline6-dev libtinfo-dev libtool-bin omniidl omniorb omniorb-idl omniorb-nameserver ruby-dev ruby-facets ruby-hoe ruby-nokogiri ruby2.3-dev
-`
+`sudo apt-get install ros-kinetic-moveit ros-kinetic-sound-play ros-kinetic-trac-ik-lib ros-kinetic-octomap-msgs ros-kinetic-rosbridge-server ros-kinetic-leap-motion libalglib-dev lua-filesystem castxml gccxml libeditline-dev libeditline0 libgmp-dev libgmpxx4ldbl liblua5.1-0 liblua5.1-0-dev libncurses5-dev libomniorb4-1 libomniorb4-dev libomnithread3-dev libomnithread3c2 libreadline-dev libreadline6-dev libtinfo-dev libtool-bin omniidl omniorb omniorb-idl omniorb-nameserver ruby-dev ruby-facets ruby-hoe ruby-nokogiri ruby2.3-dev`
 
 1. Скачать кастомные пакеты с https://yadi.sk/d/4B_tNdTw3P73Md или ftp://xq3.ru/ros  
 `
@@ -53,8 +51,8 @@ ros-kinetic-rtt-ros-integration_2.9.2-1~sweetiebot1_amd64.deb
 `
 Для робота:
 `
-ros-kinetic-orocos-toolchain_2.9.2-1~sweetiebot1_amd64.deb
-ros-kinetic-rtt-ros-integration_2.9.2-1~sweetiebot1_amd64.deb
+ros-kinetic-orocos-toolchain_2.9.2-1~sweetiebot1_armhf.deb
+ros-kinetic-rtt-ros-integration_2.9.2-1~sweetiebot1_armhf.deb
 `
 
 1. Установить их командой `dpkg -i <имя пакета>`
