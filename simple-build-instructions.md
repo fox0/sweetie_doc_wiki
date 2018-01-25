@@ -14,6 +14,7 @@
 `sudo apt-get install ros-kinetic-robot`
 
 1. (Опциональный) Для использования сторонних библиотек, компилирующихся системой catkin, может быть удобным создание специальной рабочей среды для них, которая должна быть "наслоена" (overlay) на основную. Для этого нужно выполнить следующую последовательность шагов:
+
 `
 mkdir -p ~/ros_lib_source/src
 source /opt/ros/kinetic/setup.bash
@@ -24,12 +25,15 @@ catkin_make
 source devel/setup.bash
 wstool init src
 `
+
     Для использования этого оверлея в рабочей среде catkin, создавать её нужно, используя 
+
 `source ~/ros_lib_source/devel/setup.bash`
 вместо
 `source /opt/ros/kinetic/setup.bash`
 
     Далее для добавления нужного пакета используются из директории src команды вида:
+
 `
 wstool set myrepo --git git://github.com/<полный путь>/myrepo.git
 wstool update
@@ -44,20 +48,17 @@ catkin_make
 
 `sudo apt-get install ros-kinetic-moveit ros-kinetic-sound-play ros-kinetic-trac-ik-lib ros-kinetic-octomap-msgs ros-kinetic-rosbridge-server ros-kinetic-leap-motion ros-kinetic-rospy-message-converter libalglib-dev lua-filesystem castxml gccxml libeditline-dev libeditline0 libgmp-dev libgmpxx4ldbl liblua5.1-0 liblua5.1-0-dev libncurses5-dev libomniorb4-1 libomniorb4-dev libomnithread3-dev libomnithread3c2 libreadline-dev libreadline6-dev libtinfo-dev libtool-bin omniidl omniorb omniorb-idl omniorb-nameserver ruby-dev ruby-facets ruby-hoe ruby-nokogiri ruby2.3-dev`
 
-1. Скачать кастомные пакеты с https://yadi.sk/d/4B_tNdTw3P73Md или ftp://xq3.ru/ros  
+1. Скачать кастомные пакеты с ftp://xq3.ru/ros
+
 `
-ros-kinetic-orocos-toolchain_2.9.2-1~sweetiebot1_amd64.deb
-ros-kinetic-rtt-ros-integration_2.9.2-1~sweetiebot1_amd64.deb
-`
-Для робота:
-`
-ros-kinetic-orocos-toolchain_2.9.2-1~sweetiebot1_armhf.deb
-ros-kinetic-rtt-ros-integration_2.9.2-1~sweetiebot1_armhf.deb
+ros-kinetic-orocos-toolchain_2.9.0-1_amd64
+ros-kinetic-rtt-ros-integration_2.9.0-1_amd64.deb
 `
 
 1. Установить их командой `dpkg -i <имя пакета>`
 
 1. Скачать (клонировать) основной репозиторий с кодом sweetie_bot:
+
 `
 mkdir -p ~/ros/sw/src/
 cd ~/ros/sw/src/
