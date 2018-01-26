@@ -29,7 +29,18 @@ wget ftp://xq3.ru/ros/ros-kinetic-orocos-toolchain_2.9.0-1_amd64.deb
 wget ftp://xq3.ru/ros/ros-kinetic-rtt-ros-integration_2.9.0-1_amd64.deb
 ```
 
-1. Установить их командой `dpkg -i <имя пакета>`
+1. Установить их командой 
+    ```
+sudo dpkg -i ros-kinetic-orocos-toolchain_2.9.0-1_amd64.deb
+sudo dpkg -i ros-kinetic-rtt-ros-integration_2.9.0-1_amd64.deb
+```
+
+1. Заблокировать обновления этих пакетов
+
+    ```
+sudo apt-mark hold ros-kinetic-rtt-ros-integration
+sudo apt-mark hold ros-kinetic-orocos-toolchain
+```
 
 1. Скачать (клонировать) основной репозиторий с кодом sweetie_bot:
 
