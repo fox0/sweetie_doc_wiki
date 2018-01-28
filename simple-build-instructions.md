@@ -46,7 +46,7 @@ sudo apt-mark hold ros-kinetic-orocos-toolchain
 
     `mkdir -p ~/ros/sw/src/
 cd ~/ros/sw/src/
-git clone --recursive git@gitlab.com:sweetie-bot/sweetie_bot.git
+git clone -b devel --recursive git@gitlab.com:sweetie-bot/sweetie_bot.git
 `
 
 1. Установить flexbe_behavior_engine и generic_flexbe_states (см. инструкцию на сайте)
