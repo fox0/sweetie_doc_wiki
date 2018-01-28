@@ -64,11 +64,11 @@ git clone https://github.com/FlexBE/generic_flexbe_states.git`
 
 Примечание 2: Опционально для использования сторонних библиотек, компилирующихся системой catkin, может быть удобным создание специальной рабочей среды для них, которая должна быть "наслоена" (overlay) на основную. Для этого нужно выполнить следующую последовательность шагов:
 
-`mkdir -p ~/ros_lib_source/src
+`mkdir -p ~/ros/overlays/flexbe/src
 source /opt/ros/kinetic/setup.bash
-cd ~/ros_lib_source/src
+cd ~/ros/overlays/flexbe/src
 catkin_init_workspace
-cd ~/ros_lib_source
+cd ~/ros/overlays/flexbe/
 catkin_make
 source devel/setup.bash
 wstool init src
@@ -76,7 +76,7 @@ wstool init src
 
 Для использования этого оверлея в рабочей среде catkin, создавать её нужно, используя 
 
-`source ~/ros_lib_source/devel/setup.bash`
+`source ~/ros/overlays/flexbe/devel/setup.bash`
 вместо
 `source /opt/ros/kinetic/setup.bash`
 
@@ -89,10 +89,10 @@ catkin_make
 `
 
 Пример установки `generic_flexbe_states` и `flexbe_behavior_engine`
-
-    wstool set generic_flexbe_states --git
-    https://github.com/FlexBE/generic_flexbe_states.git
-    wstool set flexbe_behavior_engine --git git://github.com/teamvigir/flexbe_behavior_engine.git
-    wstool update
-    cd ..
-    catkin_make
+```
+wstool set generic_flexbe_states --git https://github.com/FlexBE/generic_flexbe_states.git
+wstool set flexbe_behavior_engine --git https://github.com/team-vigir/flexbe_behavior_engine.git
+wstool update
+cd ..
+catkin_make
+```
