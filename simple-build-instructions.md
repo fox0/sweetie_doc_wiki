@@ -1,5 +1,25 @@
- 
-Инструкция для разработчиков по сборке и установке проекта.
+Установка
+---------
+
+**Системные требования и рекомендации**
+
+* Любой дистрибутив GNU/Linux на базе, например, Ubuntu 16.04 (Xenial) или Debian 8, 9.
+* [ROS Kinetic Kame](http://wiki.ros.org/kinetic/Installation)
+* [OROCOS 2.9](https://github.com/orocos-toolchain/orocos_toolchain), рекомендуется модифицированная версия [отсюда](https://github.com/disRecord)
+* Вспомогательные пакеты OROCOS:
+    * [rtt-ros-integration 2.9](https://github.com/orocos/rtt_ros_integration), рекомендуется модифицированная версия [отсюда](https://github.com/disRecord)
+    * [kdl_msgs](https://github.com/orocos/kdl_msgs), [rtt_kdl_msgs](https://github.com/orocos/rtt_kdl_msgs)
+    * [rttlua_completion](https://github.com/orocos-toolchain/rttlua_completion), рекомендуется модифицированная версия [отсюда](https://github.com/disRecord)
+    * `rtt_tf2_msgs`,`rtt_control_msgs` сгенерировать самостоятельно используя [`rtt_roscom`](https://github.com/orocos/rtt_ros_integration/tree/toolchain-2.9/rtt_roscomm)
+* [Rigid Body Bynamics Library](https://rbdl.bitbucket.io/)
+* [FlexBe](http://philserver.bplaced.net/fbe/)
+
+Оставшаяся часть файла содержит инструкции по установки этих пакетов и компиляции кода `SweetieBot`.
+
+Инструкция для разработчиков по сборке и установке проекта (**устарела, нуждается в обновлении**)
+-------------------------------------------------------------------------------------------------
+
+Актуальные инструкции можно найти здесь: https://gitlab.com/sweetiebot/compile_orocos
 
 Системные требования и рекомендации:
 * Любой дистрибутив GNU/Linux на базе Ubuntu 16.04 (Xenial). Например, Kubuntu 16.04.
