@@ -26,7 +26,7 @@
 @@ -28,7 +28,9 @@ void Sender::updateHook(){
    std::cout << "Sender executes updateHook !" <<std::endl;
    // Тут происходит основная работа компонента.
-   // Отправляем данные на выходнйо порт
+   // Отправляем данные на выходной порт
 -  outPort.write( 2.0 );
 +  std_msgs::Float64 to_send;
 +  to_send.data = 2.2;
