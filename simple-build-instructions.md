@@ -1,8 +1,30 @@
 Установка
----------
+=========
+
+
+Список зависимостей проекта
+----------------------------
+
+* Любой дистрибутив GNU/Linux на базе, например, Ubuntu 16.04 (Xenial) или Debian 8, 9.
+* [ROS Kinetic Kame](http://wiki.ros.org/kinetic/Installation)
+* [OROCOS 2.9](https://github.com/orocos-toolchain/orocos_toolchain), рекомендуется модифицированная версия [отсюда](https://github.com/disRecord)
+* Вспомогательные пакеты OROCOS:
+    * [rtt-ros-integration 2.9](https://github.com/orocos/rtt_ros_integration), рекомендуется модифицированная версия [отсюда](https://github.com/disRecord)
+    * [kdl_msgs](https://github.com/orocos/kdl_msgs), [rtt_kdl_msgs](https://github.com/orocos/rtt_kdl_msgs)
+    * [rttlua_completion](https://github.com/orocos-toolchain/rttlua_completion), рекомендуется модифицированная версия [отсюда](https://github.com/disRecord)
+    * `rtt_tf2_msgs`,`rtt_control_msgs` сгенерировать самостоятельно используя [`rtt_roscom`](https://github.com/orocos/rtt_ros_integration/tree/toolchain-2.9/rtt_roscomm)
+* [Rigid Body Bynamics Library](https://rbdl.bitbucket.io/)
+* [FlexBe](http://philserver.bplaced.net/fbe/)
+
+В https://gitlab.com/sweetiebot/compile_orocos находится инструкция по самостоятельной сборке OROCOS и его вспомогательных пакетов. Там же описан процесс кросскомпиляции
+для бортового компьютера Свити. 
+
 
 Инструкция для разработчиков по сборке и установке проекта
 -------------------------------------------------------------------------------------------------
+
+Данная инструкция описывает процесс развертывания рабочего места разработчика. Она позволяет собрать часть управляющего ПО предназначенного для работы на машине оператора. 
+Этот же набор пакетов может быть использован для моделирования робота.  Инструкция не содержит подробную информацию о сборке части системы исполняемой на роботе и о настройке его бортового компьютера.
 
 Системные требования и рекомендации:
 * Любой дистрибутив GNU/Linux на базе Ubuntu 16.04 (Xenial). Например, Kubuntu 16.04.
