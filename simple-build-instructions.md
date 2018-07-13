@@ -14,7 +14,7 @@
     * [rttlua_completion](https://github.com/orocos-toolchain/rttlua_completion), рекомендуется модифицированная версия [отсюда](https://github.com/disRecord)
     * `rtt_tf2_msgs`,`rtt_control_msgs` сгенерировать самостоятельно используя [`rtt_roscom`](https://github.com/orocos/rtt_ros_integration/tree/toolchain-2.9/rtt_roscomm)
 * [Rigid Body Bynamics Library](https://rbdl.bitbucket.io/)
-* [FlexBe](http://philserver.bplaced.net/fbe/)
+* [FlexBe](http://philserver.bplaced.net/fbe/): [flexbe_behavior_engine](https://github.com/team-vigir/flexbe_behavior_engine.git) c поддержкой [FlexBe APP](https://github.com/FlexBE/flexbe_app) (смотрите описание для деталей устаноки)
 
 В https://gitlab.com/sweetiebot/compile_orocos находится инструкция по самостоятельной сборке OROCOS и его вспомогательных пакетов. Там же описан процесс кросскомпиляции
 для бортового компьютера Свити. 
