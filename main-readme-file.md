@@ -2,7 +2,7 @@
 
 This control system aimed to provide easy manual and automatic control of Sweetie Bot Proto2 robot. 
 
-It works on top of [Robot Operation System (ROS)](http://wiki.ros.org/ROS/Introduction) and [OROCOS toolchain](http://www.orocos.org/wiki/orocos/toolchain/getting-started).
+It works on top of [Robot Operating System (ROS)](http://wiki.ros.org/ROS/Introduction) and [OROCOS toolchain](http://www.orocos.org/wiki/orocos/toolchain/getting-started).
 
 ![](control-system.png)
 
@@ -23,11 +23,11 @@ Watch the Software demonstration video [here](https://www.youtube.com/watch?v=FT
 
 # Installation
 
-We build packages for Ubuntu 16.04, Debian 9 Stretch and Rasbian.
-To install binary packages you need to add two repositaries:
+We build packages for Ubuntu 16.04, Debian 9 Stretch and Raspbian.
+To install binary packages you need to add two repositories:
 
 1. Sweetie Bot Project repository
-2. Official ROS repositary for dependencies
+2. Official ROS repository for dependencies
 
 ### 1. Add apt keys
 
