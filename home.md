@@ -30,7 +30,8 @@
 3. Описание аппаратной части
     1. [Глаза](eyes-hardware)
     1. [Блок питания и его программный интерфейс](hardware-power-supply)
-    1. [Устройства подкючаемые к шине Herkulex и их прошивка](hardware-servos-custom)
+    1. [Устройства подключаемые к шине Herkulex](hardware-servos-custom)
+    1. [Бортовой компьютер](hardware-onboard-computer.md)
 4. Описание архитектуры ПО
     1. [Общие соглашения](common)
     2. Математическое обеспечение
