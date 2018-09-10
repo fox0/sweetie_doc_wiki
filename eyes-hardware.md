@@ -202,13 +202,13 @@ DPI представляет собой параллельную шину дан
 
 
 [KMS инфраструктура](https://wiki.archlinux.org/index.php/kernel_mode_setting):
-    * предоставить EDID напрямую через `drm_kms_helper`
-    * предоставить EDID напрямую через `drm` (нужна версия ядра выше 4.15)
-    * через параметр ядра `video` (обрабатывается модулем `drm`?) --- нет явного указания таймингов, только режим и частота обновления и т.п.
+* предоставить EDID напрямую через `drm_kms_helper`
+* предоставить EDID напрямую через `drm` (нужна версия ядра выше 4.15)
+* через параметр ядра `video` (обрабатывается модулем `drm`?) --- нет явного указания таймингов, только режим и частота обновления и т.п.
 
 Прямое взаимодействия с модулем ядра:
-    * [Пример для `omap` у `BeagleBoard`](https://www.linusakesson.net/hardware/beagleboard/vga.php) --- указание в парамерах ядра.
-    * [Ряд других модулей ядра](https://developer.toradex.com/knowledge-base/display-output-resolution-and-timings-linux) --- здесь есть примеры DeviceTree.
+* [Пример для `omap` у `BeagleBoard`](https://www.linusakesson.net/hardware/beagleboard/vga.php) --- указание в парамерах ядра.
+* [Ряд других модулей ядра](https://developer.toradex.com/knowledge-base/display-output-resolution-and-timings-linux) --- здесь есть примеры DeviceTree.
 
 [Устаревшие методы для `fbdev`](https://www.systutorials.com/docs/linux/man/8-fbset/) --- не должен работать для соверменной инфраструктуры `drm`/`kms`.
 
@@ -217,5 +217,5 @@ DPI представляет собой параллельную шину дан
 Не ясно как осуществить тонкую настройку параметров HDMI (`hdmi_*` параметры в `boot/config.txt` для образов RPI).
 
 ## Ссылки по теме:
-http://processors.wiki.ti.com/index.php/GPU_Compositing
-http://blog.qt.io/blog/2009/11/20/building-qt-to-make-use-of-the-beagle-boards-sgx-gpu/
+* http://processors.wiki.ti.com/index.php/GPU_Compositing
+* http://blog.qt.io/blog/2009/11/20/building-qt-to-make-use-of-the-beagle-boards-sgx-gpu/
