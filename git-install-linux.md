@@ -39,6 +39,14 @@ $ cat ~/.ssh/id_rsa.pub
 И вставляем его в свой профиль на гитлабе в разделе [SSH keys](https://gitlab.com/profile/keys). В поле Title можно ввести имя компьютера или пользователя.
 ![2016-10-26_12-05-45](/uploads/a6659490f8c24f72f939d19c542deda9/2016-10-26_12-05-45.png)
 
+Если после этого git clone пишет Permission denied (publickey) то попробуйте сделать это:
+
+```
+$ eval "$(ssh-agent -s)"
+Agent pid 59566
+$ ssh-add ~/.ssh/id_rsa
+```
+
 ## Настройка git
 Обязательные настройки:
 ```
