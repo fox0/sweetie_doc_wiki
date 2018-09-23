@@ -258,15 +258,15 @@
 
 **Описание структуры пакета** (для случая, кода первые два байта загововка не хрянятся), вероятно, можно не использовать
 
-// herkulex_protocol.c
-enum frame_offsets_t { 
-    PACKAGE_SIZE = 0;
-	PACKAGE_ID = 1;
-	PACKAGE_CMD = 2;
-	PACKAGE_CHECKSUM1 = 3;
-	PACKAGE_CHECKSUM2 = 4;
-	PACKAGE_DATA = 5;
-}
+    // herkulex_protocol.c
+    enum frame_offsets_t { 
+        PACKAGE_SIZE = 0;
+        PACKAGE_ID = 1;
+        PACKAGE_CMD = 2;
+        PACKAGE_CHECKSUM1 = 3;
+        PACKAGE_CHECKSUM2 = 4;
+        PACKAGE_DATA = 5;
+    }
 
 #### Обращение к регистровым файлам
 
@@ -291,12 +291,12 @@ enum frame_offsets_t {
 Возврат `false` в случае неуспеха (недопустимая операция, выход за диапазон и т.п.).
 Должна обеспечиваться атомарность операций (критическая секция)
 
-	// herkulex_protocol_<arch>.h
-	bool eep_read(herkulex_device_t * device, uint offset, uint size, uint8 * dst);
-	bool eep_write(herkulex_device_t * device, uint offset, uint size,  uint8 * src);
+    // herkulex_protocol_<arch>.h
+    bool eep_read(herkulex_device_t * device, uint offset, uint size, uint8 * dst);
+    bool eep_write(herkulex_device_t * device, uint offset, uint size,  uint8 * src);
 
-	bool ram_read(herkulex_device_t * device, uint offset, uint size, uint8 * dst);
-	bool ram_write(herkulex_device_t * device, uint offset, uint size,  uint8 * src);
+    bool ram_read(herkulex_device_t * device, uint offset, uint size, uint8 * dst);
+    bool ram_write(herkulex_device_t * device, uint offset, uint size,  uint8 * src);
 
 
 #### Интерфейс протокола 
