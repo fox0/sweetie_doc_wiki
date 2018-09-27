@@ -5,14 +5,25 @@
 Задатчики формируют задающее воздействии для некоторого набора исполнительных органов.
 Для кинематических цепочек выдается желаемая поза в угловой или декартовой системе координат. В остальных случаях тип задания зависит от реализации.
 
-Разрешение конфликтов ресурсов обеспечивается [арбитром и клиентским плагином](components-resource-control).
-
-Способ взаимодействия с верхним уровнем не декларируется, но рекомендуется использовать `actionlib`.
 
 Набор интерфейсов сильно зависит от назначения. Принципиально выделяются три типа задатчиков:
 1. **`Follow`** реализуют алгоритмы слежения, используют механизм портов для получения задающего воздействия из вне и операции для активации и деактивации. Примеры: `HeadFollowPoint` (следить за точкой), `FollowJointState` (следить за позой).
 1. **`Move`** реализуют алгоритмы дискретного позиционного управления. Используют механизм `actionlib` для получения задания. Примеры: `MoveJointState` (переместить в заданную позу).
-1. **`Trajectory`** реализуют алгоритмы непрерывного программного управления (исполнение известной траектории). Используют механизм `actionlib` для получения задания. Примеры: `TrajectoryJointState` (исполнение `JointTrajectory`).
+1. **`Execute`** реализуют алгоритмы непрерывного программного управления (исполнение известной траектории). Используют механизм `actionlib` для получения задания. Примеры: `ExecuteJointTrajectory` (исполнение `JointTrajectory`).
+
+## Разрешение конфликтов
+
+Разрешение конфликтов ресурсов обеспечивается [арбитром и клиентским плагином](components-resource-control).
+
+## Способ взаимодействия с верхним уровнем
+
+Основной способ взаимодействия с верхним уровнем `actionlib`. Он позволяет высшему уровня контролировать исполнение поставленной задачи,
+реагировать на ситуацию, когда ее исполнения прервано. 
+* Если задача может быть передана задатчику одним сообщением (траектория, целевая поза), то используется советующий тип действия (например, `control_msgs::FollowJointTrajectory`).
+* Если требуется просто активировать контроллер (с указанием или без списка выделяемых ресурсов), то используется действие `sweetie_bot_resource_control_msgs::SetOperational`. 
+    Пример: `FollowPose`, когда он активен для данной кинематической цепочки, то ее конец отслеживает заданную позу.
+
+## Типовой интерфейс задатчика
 
 Далее перечислены большинство возможных способов взаимодействия, реальный компонент реализует только часть.
 
@@ -45,11 +56,7 @@
 
 ### Операции
 
-Если компонент использует внешний модуль обратной кинематики, то требует сервис `ik`, содержащий операции:
-1. `solveIK(string name, Pose, JntArray)`
-1. `solveIKLimits(string name, Pose in, JntArray out, JntArray min, JntArray max)`
-1. `solveVelIK(string name, JntArray pos, Twist vel_in, JntArray vel_out)`
-Подробнее смотрите в [`kinematics_inv`](components-kinematics).
+1. ТребуетЖ `bool poseToJointState(const RigidBodyState& in, JointState& out)` --- обратная кинематика
 
 ### Параметры
 
@@ -59,8 +66,8 @@
 
 ### Плагины
 
-1. Требует загрузки: плагин клиента [подсистемы распределив ресурсов](components-resource-control) и предоставляемые им операции.
-    Опционально требует реализации `bool resourceChangeHook()` --- пользовательский callbcak, вызываемый при изменении состава ресурсов. Возвращает `true`, если компонент остается активен. 
+1. Требует загрузки: плагин клиента [подсистемы распределив ресурсов](components-resource-control) и предоставляемые им операции --- должен быть загружен в компонент.
+2. Требует (опционально): [модель робота](plugin-robotmodel).
 
 ### Операции
 
@@ -88,6 +95,10 @@
 2.  Извещения о завершении, отказе исполнения осуществялется средствами `actionlib` через взаимодействие с `GoalHandle`.
 Управление набором `GoalHandle` и их сотояниями ложится на пользователя. 
 
+**`SetOperational`**
+
+Компонент реализуется в виде наследника класса [`SimpleControllerBase`](components-simple-controller-base) из пакета `sweetie_bot_resource_control`.
+
 ### Семантика исполнения
 
 После исполнения `configure` компонент готов к работе и запуску.
@@ -103,11 +114,10 @@
 <!--Значения времени и номера периода дискретизации переносятся из `TimerEvent` в выходные сообщения.-->
 
 По завершению движения, либо по требованию освобождения ресурсов производится остановка выполнения.
-Производится информирование высшего уровня средствами `actionlib` (цель достигнута/отвергнута), либо иным способом, если это требуется.
+Производится информирование высшего уровня средствами `actionlib` (цель достигнута/отвергнута).
 
 ### Детали реализации.
 
-Для компонентов на базе `actionlib` следует удалить операцию `start()` из внешнего интерфейса, либо попытка активации должна приводить к неуспеху. 
 
 Состояния "запущен" и "активен" не тождественны. Неактивный компонент не посылает задающее воздействие,
 независимо от его состояния, а остановленный компонент не обрабатывает сообщения, включая сообщения `actionlib`.
@@ -201,4 +211,102 @@
         stopOperational();
     }
             
+
+## `SimpleControllerBase` 
+
+
+Superclass for controller components which use actionlib SetOperational interface for activation.
+It is derived from `RTT::TaskContext` and already provides logger and `sync` port with `period` property.
+
+This class provides common functionality (actionlib and resource arbiter interations) for
+controllers which are able to control arbitrary or specific set of resources. 
+Such controllers can are activated or deactivated by SetOperationalGoal message which contains 
+`resource` field with desired resource set (this value can be ignored by controller).
+
+This class implements ActionServer interface and ResourceClientInterface, so a component subclass should
+only implements following methods.
+
+    bool configureHook_impl();
+    bool processResourceSet_impl(const std::vector<std::string>& resource_set, std::vector<std::string>& desired_resource_set);
+    bool startHook_impl();
+    bool resourceChangedHook_impl(const std::vector<std::string>& desired_resource_set);
+    void updateHook_impl();
+    void stopHook_impl();
+    void cleanupHook_impl();
+
+Note that minimal implementation are already provided.
+
+Also class provides Logger @c log object and @a controlled_chains and @a period properties.
+
+### Detailed interface description
+
+Note: subclass should not implement standard `configureHook()`, `startHook()` and etc. Use functions described below.
+
+1. `bool configureHook_impl()` Called after `resource_client` and `ActionServer` are configured. Should contain component initialization.
+
+2. `bool processResourceSet_impl(strings& goal_resource_set, strings& desired_resource_set)`
+    Implement this function to restrict acceptible resources sets or enforce specific resource set.
+    
+    Always called after `configureHook_impl()` and before actual resource request. This function is used  
+    to check if action goal is sane and to determine resources which should be requested.
+    
+    Minimal implementation sets `desired_resource_set equal` to `goal_resource_set` and return true.
+    In more complex cases `goal_resource_set` should be checked if it comforms controller-specific 
+    conditions and the actual resource set to request should be assigned to `desired_resource_set`
+    
+    `goal_resource_set` is the resource from `SetOperationalGoal` messages. `start()` operation uses default value from `kinematic_chains` property.
+    `desired_resource_set` is the resource set which should be requested. 
+    Function return true if `goal_resource_set` set is acceptible for component.
+
+
+2. `bool startHook_impl()` is `startHook` implementation. Requested and acquired resource sets are not known yet. Return true to start component.
+
+3. `bool resourceChangedHook_impl(const strings& desired_resource_set)` implements reaction on resource set change.
+    Always called after `startHook_impl()` and `processResourceSet_impl()`. Acquired resource set can be accessed via `resource_client` plugin interface.
+    This function must reinitialize controller to run with different resource set or return failure.
+
+    `desired_resource_set` is resource set requested from arbiter. It is the same set which was returned in second parameter of `processResourceSet_impl()`.
+    Function shuld return true to activate controller.
+
+4.  `void updateHook_impl()`
+5.  `void stopHook_impl()`
+6.  `cleanupHook_impl()`
+
+### Example
+
+`FollowPose` controller make one of end effectors to follow provided pose. Only one of kinematic chains can be controlled at time.
+
+
+    bool configureHook_impl() {
+       // memory reservation
+       // properties check
+    }
+
+    bool processResourceSet_impl(const std::vector<std::string>& resource_set, std::vector<std::string>& desired_resource_set) {
+        if (resource_set.size() != 0) return false; // check size
+        if (robot_model->getChainIndex(resource_set[0]) == -1) return false; // check if valid kinematic chain name supplied
+        desired_resource_set = resource_set;
+        return true;
+    }
+
+    bool startHook_impl() {
+        // reset component state before start 
+    }
+
+    bool resourceChangedHook_impl(const std::vector<std::string>& desired_resource_set) {
+        if (resource_client->hasResource(desired_resource_set[0])  
+        // NOTE: we already checked it size of `desired_resource_set` before in `processResourceSet_impl()` call.
+        {
+           // adjust commponent state to the new controlled chain.
+        }
+        else {
+           return false;
+        }
+    }
+
+    void updateHook_impl() {
+        // port porcessing
+        // desired pose calculatrin
+        // publish results
+    }
 
