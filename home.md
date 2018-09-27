@@ -24,8 +24,7 @@
            4. [Добавляем интеграцию с ROS примеру 2](orocos-ros-example2)
            5. [Сервисы и плагины](orocos-services)
 2. Сборка и установка проекта
-    1. [Установка из бинарных пакетов] (install-from-binary-packages)
-    1. [Краткая инструкция по самостоятельной сборке из исходников] (simple-build-instructions)
+    1. [Установка](simple-build-instructions)
     1. [Описание репозиториев проекта](git-project-repos)
 3. Описание аппаратной части
     1. [Глаза](eyes-hardware)
