@@ -239,7 +239,7 @@ OROCOS для более удобной передачи данных.
      string[] name
      float64[] support
 
-**Замечание**: Принципиально возможно "занести" эти коэффициенты в CartesianState и JointLimbState, 
+**Замечание**: Принципиально возможно "занести" эти коэффициенты в `RigidBodyState`
 однако отдельное сообщение все равно требуется для передачи выхода датчиков касания.
 
 **Замечание**: можно отказаться от `name`, но тогда будут сложности с расширением массива датчиков касания.
@@ -265,6 +265,127 @@ OROCOS для более удобной передачи данных.
 
 Поле `path_tolerance` используются для проверки начальных условий исполнения траектории и последующего  контроля движения. 
 `goal_tolerance` проверяется по окончанию движения. 
+
+#### Траектория в декартовой системе координат: `FollowStepSequence`
+
+**Семантика**: последовательность шагов. Несет онформацию о смещении основания, исполнительных органов, наличии касания и внешних силах, рассчитанных модулем генерации походки.
+
+**Прагматика**: траектория формируется библиотекой TOWR в виде внутренних структур данных (сплайнов), тип данного действия копирует сообщения `xpp_msg::RobotStateCartesianTrajectory`, 
+позволя удобно формировать цель по структурам TOWR.
+
+    # Robot movement presented in cartesian space.
+    #
+    # Request:
+    #  * append --- append this trajectory to previous trajectory if possible
+    #  * ee_names --- end effector names (the same order and size as in trajectory)
+    #  * trajectory --- trajectory representation
+    #  * position_tolerance --- maximal allowed offset from desired position for end effectors and robot base.
+    #  * orientation_tolerance --- maximal allowed axis-angle errors for robot base and end effectors.
+    #
+    # Result:
+    #  * error_code 
+    #      SUCCESSFUL is returned on success, INVALID_TRAJECTORY if trajectory is inconsistent (unsupported 
+    #      time intervals, nonmonotonic time, incorect vector length and so on), INVALID_END_EFFECTOR indicates
+    #      that end effector name is unknown, UNABLE_TO_APPEND says that trajectory cannot be appended to current 
+    #      action and TOLERANCE_VIOLATED is raised if psition or orientation error is higher then bound.
+    #  * error_string
+    #
+    # Feedback:
+    #  * time_from_start --- current execution time of compound trajectory.
+    #  
+    std_msgs/Header
+
+    bool append 
+    string[] ee_names
+    xpp_msgs/RobotStateCartesian[] trajectory
+
+    geometry_msgs/Vector3 position_tolerance
+    geometry_msgs/Vector3 orientation_tolerance
+    --
+    int32 error_code
+    string error_string
+
+    int32 SUCCESSFUL = 0
+    int32 INVALID_TRAJECTORY = -1 #
+    int32 INVALID_END_EFFECTOR = -2
+    int32 UNABLE_TO_APPEND = -3
+    int32 TOLERANCE_VIOLATED = -4
+    --
+    duration time_from_start
+
+
+**Замечание**: вместо `xpp_msgs/RobotStateCartesian` можно использовать свой тип со сходной структоурой.
+
+#### Перемещение платформы в декартовой системе координат: `MoveBase`
+
+**Семантика**: задание планировщику на перемещение платформы. Позволяет решать задачи перемещения платформы и принятие заданной позы. 
+
+* Для перемещения платформы требуется указать тип походки и желаемую позу основаия. Если указаны огрничения для ног, они будут применены также. 
+    При этом условия на контакты и Z координата для ног игнорируются: в конце движения все ноги находятся в состоянии контакта.
+* Для принятия позы используется режим STEPS. Надо указать конечное положения центра масс и ног. 
+    Если все ноги изанчально опорные, каждая цель для ноги декларирует один шаг, т.е. всего будет сделано `ee_goal.size()` шагов в том порядке, в каком идут цели. 
+	В случае, если одна илибольше ног в воздухе, добавляется один шаг, чтобы опустить их на землю.
+
+**Прагматика**: одно сообщение для разных задач связанных с шаганием упрощает сервер. 
+
+Вспомогательный тип для задания цели движения
+
+    # sweetie_bot_kinematics_msgs/EndEffectorGoal
+	# Goal state of end effector.
+	# 
+	# * name --- end effector name.
+	# * frame_type --- frame of the end effector pose.
+	# * contact --- should be end effector be in contact at the end of motion.
+	# * pose --- desired pose. Note that towr ignores end effector orientation.
+	#
+	string name
+	uint32 frame_type
+	geometry_msgs/Pose pose
+	bool contact
+	int32 WORLD = 0	# unmovable coordinate system
+	int32 BASE_INTIAL = 1
+	int32 BASE_FINAL = 2
+	int32 PATH_INITIAL = 3
+	int32 PATH_FINAL = 4
+
+Действие
+
+    # sweetie_bot_kinematics_msgs/MoveBase
+	# Sweetie Bot base movemnt request.
+	# 
+	# * gait_type --- one of posible gaits. Only free gait supports end effector end pose without contact.
+	# * duration --- motion duration
+	# * steps --- the number of step cycles, it is ignored in STEPS mode.
+	# * base_goal --- goal pose of robot base
+	# * ee_goal --- goal poses for end effector. For free gait their order defines step sequece.
+	# * position_tolerance --- admissable position error.
+	# * orientation_tolerance  --- admissable orientaton error.
+	#
+    int32 gait_type
+    duration duration
+	uint32 steps
+    
+    geometry_msgs/Pose base_goal
+    sweetie_bot_kinematics_msgs/EndEffectorGoal ee_goal
+    
+    geometry_msgs/Vector3 position_tolerance
+    geometry_msgs/Vector3 orientation_tolerance
+
+	INT32 STEPS = 0 
+	INT32 GAIT_STEP = 1
+	INT32 GAIT_TROT = 2
+    --
+    int32 error_code
+    string error_string
+    
+    int32 SUCCESSFUL = 0
+    int32 NO_SOLUTION = -1 #
+    int32 INVALID_END_EFFECTOR = -2
+    int32 UNABLE_TO_APPEND = -3
+    int32 TOLERANCE_VIOLATED = -4
+    --
+    duration time_from_start
+
 
 #### Текстовое действие
 
@@ -447,6 +568,41 @@ OROCOS для более удобной передачи данных.
     bool is_operational
     --
     uint32 request_id
+
+### SetOperational (ROS action)
+
+**Семантика**: действие активации/деактивации задатчика. Позволяет высшему уровню выбрать контроллируемый список ресурсов, при необходимости задатчик может изменить его и известить о неудаче в процессе исполнения.
+
+**Прагматика**: высший уровень должен знать, активен ли активированный задатчик. Этого можно достигнуть только используя интерфейс действий. Поле `resources` позволяет управлять произвольным набором элементов робота (если задатчику все равно, чем управлять). Если же задатчик может управлять только фиксированным набором --- он извещает об этом высший уровень.
+
+    ### SetOperational (ROS service)
+    # Controller activation/deactivation action.
+    #
+    # Request: activate/deactivate controller
+    # * operational --- new controller state. Allows to deactivate component.
+    # * resources --- list of resorces owned by controllers. Some controllers may ignore this field, 
+    #      or have different interpretation of it.
+    # 
+    # Feedback: controller is active.
+    # * resources --- actual resources set controlled by component.
+    # 
+    # Result: controller is not active  (deactivation can be triggered by iternal logic or external request)
+    # * error_code --- deactivation reason
+    # * error_string --- human redable deactivation reason
+    #
+    bool operational
+    string[] resources
+    ---
+    int32 error_code
+    string error_string
+    
+    int32 SUCCESSFUL = 0 # goal is achived or deactivation was triggered by external factor (e.g. action is ABORTED or PREEMTED).
+    int32 COMPONENT_IS_NOT_READY = -1 # controller is not configured properly.
+    int32 INVALID_RESOURCE_SET = -2 # Unable to start with prescribed resource set (for example, cannot use head as support leg, or cann't balance on one leg).
+    int32 START_CONDITIONS_VIOLATED = -3 # In current robot state controller cann't start. 
+    int32 EXECUTION_ERROR = -4 # Internal error of started controller.
+    ---
+    string[] resources
 
 ## Тактирование и синхронизация
 
