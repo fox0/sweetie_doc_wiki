@@ -26,6 +26,7 @@
 2. Сборка и установка проекта
     1. [Установка](simple-build-instructions)
     1. [Описание репозиториев проекта](git-project-repos)
+    1. [Конфигурация компьютеров и сети](computer-configuration)
 3. Описание аппаратной части
     1. [Глаза](eyes-hardware)
     1. [Блок питания и его программный интерфейс](hardware-power-supply)
