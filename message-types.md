@@ -270,15 +270,17 @@ OROCOS для более удобной передачи данных.
 
 **Семантика**: последовательность шагов. Несет онформацию о смещении основания, исполнительных органов, наличии касания и внешних силах, рассчитанных модулем генерации походки.
 
-**Прагматика**: траектория формируется библиотекой TOWR в виде внутренних структур данных (сплайнов), тип данного действия копирует сообщения `xpp_msg::RobotStateCartesianTrajectory`, 
-позволя удобно формировать цель по структурам TOWR.
+**Прагматика**: траектория формируется библиотекой TOWR в виде внутренних структур данных (сплайнов), тип данного действия копирует сообщения `xpp_msg::RobotStateCartesianTrajectory,
+однако позволяет более эффективно хранить большие массивы точек и задавать ориентацию исполнительных органов
 
     # Robot movement presented in cartesian space.
     #
     # Request:
     #  * append --- append this trajectory to previous trajectory if possible
     #  * ee_names --- end effector names (the same order and size as in trajectory)
-    #  * trajectory --- trajectory representation
+    #  * time_from_start --- timestamps of points in trajectories, seconds.
+    #  * base_motion --- base_link trajectory
+    #  * ee_motion --- end effector trajectories represented in base_link frame.
     #  * position_tolerance --- maximal allowed offset from desired position for end effectors and robot base.
     #  * orientation_tolerance --- maximal allowed axis-angle errors for robot base and end effectors.
     #
@@ -287,7 +289,8 @@ OROCOS для более удобной передачи данных.
     #      SUCCESSFUL is returned on success, INVALID_TRAJECTORY if trajectory is inconsistent (unsupported 
     #      time intervals, nonmonotonic time, incorect vector length and so on), INVALID_END_EFFECTOR indicates
     #      that end effector name is unknown, UNABLE_TO_APPEND says that trajectory cannot be appended to current 
-    #      action and TOLERANCE_VIOLATED is raised if psition or orientation error is higher then bound.
+    #      action and TOLERANCE_VIOLATED is raised if psition or orientation error is higher then bound,
+	#      INTERNAL_ERROR indicate that trajectory cannot be execued due to internal error.
     #  * error_string
     #
     # Feedback:
@@ -296,12 +299,15 @@ OROCOS для более удобной передачи данных.
     std_msgs/Header
 
     bool append 
-    string[] ee_names
-    xpp_msgs/RobotStateCartesian[] trajectory
+    #string[] ee_names
+    #xpp_msgs/RobotStateCartesian[] trajectory
+	float64[] time_from_start
+	sweetie_bot_kinematics_msgs/RigidBodyTrajectory base_motion
+	sweetie_bot_kinematics_msgs/RigidBodyTrajectory[] ee_motion
 
-    geometry_msgs/Vector3 position_tolerance
-    geometry_msgs/Vector3 orientation_tolerance
-    --
+    float64 position_tolerance
+    float64 orientation_tolerance
+    ---
     int32 error_code
     string error_string
 
@@ -310,11 +316,25 @@ OROCOS для более удобной передачи данных.
     int32 INVALID_END_EFFECTOR = -2
     int32 UNABLE_TO_APPEND = -3
     int32 TOLERANCE_VIOLATED = -4
-    --
-    duration time_from_start
+    int32 INTERNAL_ERROR = -5
+    ---
+    float64 time_from_start
 
 
-**Замечание**: вместо `xpp_msgs/RobotStateCartesian` можно использовать свой тип со сходной структоурой.
+Вспомогательные типы:
+
+    #  sweetie_bot_kinematics_msgs/RigidBodyTrajectory
+    string name  # end effector name
+    sweetie_bot_kinematics_msgs/RigidBodyTrajectoryPoint[] points
+
+
+    #  sweetie_bot_kinematics_msgs/RigidBodyTrajectoryPoint 
+
+    geometry_msgs/Pose pose
+    kdl_msgs/Twist twist
+    kdl_msgs/Twist accel                    
+    bool contact 
+
 
 #### Перемещение платформы в декартовой системе координат: `MoveBase`
 
